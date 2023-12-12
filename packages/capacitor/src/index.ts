@@ -6,5 +6,3 @@ import {SystemDirectoryType} from './SystemDirectoryType';
 const fileSystem: IFileSystem<SystemDirectoryType> = null;
 
 export {fileSystem as FileSystem, SystemDirectoryType};
-export {File} from './File';
-export {Directory} from './Directory';
