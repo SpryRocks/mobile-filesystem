@@ -1,8 +1,22 @@
 {
   "name": "mobile-filesystem",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "repository": "git@github.com:SpryRocks/mobile-filesystem.git",
   "author": "maksim.zhemerenko <maksym.zhemerenko@paymash.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "lerna:bootstrap": "lerna bootstrap",
+    "lerna:publish": "lerna publish --no-verify-access",
+    "lint": "lerna run lint",
+    "compile": "lerna run compile",
+    "build": "lerna run build"
+  },
+  "devDependencies": {
+    "lerna": "^8.0.0",
+    "typescript": "^5.3.3"
+  }
 }

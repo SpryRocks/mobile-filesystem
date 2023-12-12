@@ -1,0 +1,29 @@
+{
+  "name": "@spryrocks/mobile-filesystem-plugin-core",
+  "version": "0.0.0",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "dist/"
+  ],
+  "author": "",
+  "description": "MobileFilesystemCore",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint './**/*.{ts,tsx}' --cache",
+    "build": "npm run clean && tsc && rollup -c rollup.config.mjs",
+    "clean": "rimraf ./dist",
+    "prepublishOnly": "npm run build",
+    "compile": "tsc --noEmit"
+  },
+  "dependencies": {
+  },
+  "peerDependencies": {
+  },
+  "devDependencies": {
+    "@spryrocks/eslint-config": "^0.3.0-alpha.2",
+    "rollup": "^4.8.0"
+  }
+}
