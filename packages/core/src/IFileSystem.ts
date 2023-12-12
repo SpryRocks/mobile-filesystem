@@ -1,4 +1,6 @@
+import {IDirectory} from './IDirectory';
+
 export abstract class IFileSystem<TSystemDirectoryType> {
   abstract isAvailable(): boolean;
-  abstract getSystemDirectoryPath(type: TSystemDirectoryType): string;
+  abstract getSystemDirectory(type: TSystemDirectoryType): IDirectory;
 }
