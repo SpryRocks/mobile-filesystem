@@ -17,6 +17,7 @@ export abstract class IDirectory extends IEntry {
     name: string,
     options?: DeleteDirectoryByNameOptions,
   ): Promise<void>;
+  abstract deleteFile(name: string): Promise<void>;
   abstract getEntries(): Promise<GetEntriesResult>;
   abstract createSubDirectory(name: string, options?: CreateOptions): Promise<void>;
 }
