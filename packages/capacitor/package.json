@@ -1,5 +1,5 @@
 {
-  "name": "@spryrocks/mobile-filesystem-plugin-core",
+  "name": "@spryrocks/capacitor-filesystem-plugin",
   "version": "0.0.2-alpha.1",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -9,7 +9,7 @@
     "dist/"
   ],
   "author": "",
-  "description": "MobileFilesystemPluginCore",
+  "description": "CapacitorFilesystemPlugin",
   "license": "MIT",
   "scripts": {
     "lint": "eslint './**/*.{ts,tsx}' --cache",
@@ -17,6 +17,9 @@
     "clean": "rimraf ./dist",
     "prepublishOnly": "npm run build",
     "compile": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@spryrocks/mobile-filesystem-plugin-core": "0.0.2-alpha.1"
   },
   "devDependencies": {
     "@spryrocks/eslint-config": "^0.3.0-alpha.2",
