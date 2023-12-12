@@ -5,4 +5,4 @@ import {SystemDirectoryType} from './SystemDirectoryType';
 // @ts-ignore
 const fileSystem: IFileSystem<SystemDirectoryType>;
 
-export {fileSystem as FileSystem};
+export {fileSystem as FileSystem, SystemDirectoryType};

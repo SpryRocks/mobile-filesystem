@@ -1,1 +1,6 @@
-export enum SystemDirectoryType {}
+export enum SystemDirectoryType {
+  Data = 'Data',
+  ExternalData = 'ExternalData',
+  Documents = 'Documents',
+  Cache = 'Cache',
+}
