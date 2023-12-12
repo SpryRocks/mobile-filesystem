@@ -1,0 +1,8 @@
+{
+  "name": "mobile-filesystem",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:SpryRocks/mobile-filesystem.git",
+  "author": "maksim.zhemerenko <maksym.zhemerenko@paymash.com>",
+  "license": "MIT"
+}
