@@ -1,8 +1,6 @@
-import {FileSystemPlugin} from '@spryrocks/mobile-filesystem-plugin-core';
+import {FileSystemPlugin} from './FileSystemPlugin';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const impl: FileSystemPlugin = null;
+const impl = new FileSystemPlugin();
 
 export * from '@spryrocks/mobile-filesystem-plugin-core';
 export {impl as FileSystemPlugin};
