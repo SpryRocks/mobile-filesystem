@@ -22,6 +22,6 @@ export abstract class File extends Entry {
   abstract create(): Promise<void>;
   abstract writeString(data: string, options?: FileWriteStringOptions): Promise<void>;
   abstract writeBlob(data: Blob): Promise<void>;
-  abstract readAsString(): Promise<void>;
-  abstract readAsDataUrl(): Promise<void>;
+  abstract readAsString(): Promise<string>;
+  abstract readAsDataUrl(): Promise<string>;
 }

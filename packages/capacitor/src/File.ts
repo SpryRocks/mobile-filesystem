@@ -33,7 +33,7 @@ export class File extends CoreFile {
     throw new Error('Method not implemented.');
   }
 
-  override readAsString(): Promise<void> {
+  override readAsString(): Promise<string> {
     throw new Error('Method not implemented.');
   }
 
@@ -41,7 +41,7 @@ export class File extends CoreFile {
     throw new Error('Method not implemented.');
   }
 
-  override readAsDataUrl(): Promise<void> {
+  override readAsDataUrl(): Promise<string> {
     throw new Error('Method not implemented.');
   }
 
