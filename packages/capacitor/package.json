@@ -1,6 +1,6 @@
 {
   "name": "@spryrocks/capacitor-filesystem-plugin",
-  "version": "0.0.2-alpha.29",
+  "version": "0.0.2-alpha.30",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
