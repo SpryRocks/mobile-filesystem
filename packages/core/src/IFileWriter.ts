@@ -1,3 +1,3 @@
 export abstract class IFileWriter {
-  abstract writeString(data: string): Promise<void>;
+  abstract writeBlob(data: Blob): Promise<void>;
 }
