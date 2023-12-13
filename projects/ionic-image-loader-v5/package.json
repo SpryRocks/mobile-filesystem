@@ -1,0 +1,46 @@
+{
+  "name": "@spryrocks/ionic-image-loader-v5",
+  "version": "0.0.1-alpha.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "ionic-image-loader to Ionic 5",
+  "main": "lib/public-api.js",
+  "types": "lib/public-api.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexowson/ionic-image-loader-v5.git"
+  },
+  "keywords": [
+    "ionic5",
+    "image",
+    "loading",
+    "ionic",
+    "angular8"
+  ],
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build": "tsc -p ./tsconfig.lib.json",
+    "prepublishOnly": "yarn clean && yarn build"
+  },
+  "peerDependencies": {
+    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.9"
+  },
+  "devDependencies": {
+    "@angular/common": "^8.2.14",
+    "@angular/compiler": "~8.2.14",
+    "@angular/compiler-cli": "~8.2.14",
+    "@angular/core": "^8.2.14",
+    "@angular/forms": "~8.2.14",
+    "@angular/platform-browser": "~8.2.14",
+    "@angular/platform-browser-dynamic": "~8.2.14",
+    "@ionic-native/ionic-webview": "^5.36.0",
+    "@ionic/angular": "^7.6.0",
+    "codelyzer": "^5.0.0",
+    "rxjs": "~6.5.1",
+    "tslib": "^1.9.0",
+    "zone.js": "~0.9.1",
+    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.22",
+    "typescript": "^5.3.3"
+  }
+}
