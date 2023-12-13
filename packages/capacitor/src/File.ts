@@ -1,5 +1,8 @@
 import {IFile, IFileWriter} from '@spryrocks/mobile-filesystem-plugin-core';
-import {OpenWriterOptions} from '@spryrocks/mobile-filesystem-plugin-core/dist/esm/IFile';
+import {
+  FileMetadata,
+  OpenWriterOptions,
+} from '@spryrocks/mobile-filesystem-plugin-core/dist/esm/IFile';
 
 export class File extends IFile {
   override openWriter(_options?: OpenWriterOptions | undefined): Promise<IFileWriter> {
@@ -15,6 +18,14 @@ export class File extends IFile {
   }
 
   override exists(): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+
+  override getMetadata(): Promise<FileMetadata> {
+    throw new Error('Method not implemented.');
+  }
+
+  override get name(): string {
     throw new Error('Method not implemented.');
   }
 }
