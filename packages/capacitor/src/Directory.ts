@@ -3,24 +3,32 @@ import {
   DirectoryGetDirectoriesResult,
   DirectoryGetDirectoryOptions,
   DirectoryGetFileOptions,
-  File,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 import {
   DirectoryCreateOptions,
   DirectoryDeleteOptions,
   DirectoryGetFilesResult,
 } from '@spryrocks/mobile-filesystem-plugin-core';
+import {CapPath} from './CapPath';
+import {File} from './File';
 
 export class Directory extends CoreDirectory {
-  override getFile(_path: string, _options?: DirectoryGetFileOptions): Promise<File> {
-    throw new Error('Method not implemented.');
+  constructor(private readonly capPath: CapPath) {
+    super();
   }
 
-  override getDirectory(
-    _path: string,
+  override async getFile(
+    path: string,
+    _options?: DirectoryGetFileOptions,
+  ): Promise<File> {
+    return new File(this.capPath.subPath(path));
+  }
+
+  override async getDirectory(
+    path: string,
     _options?: DirectoryGetDirectoryOptions,
   ): Promise<Directory> {
-    throw new Error('Method not implemented.');
+    return new Directory(this.capPath.subPath(path));
   }
 
   override delete(_options?: DirectoryDeleteOptions): Promise<void> {

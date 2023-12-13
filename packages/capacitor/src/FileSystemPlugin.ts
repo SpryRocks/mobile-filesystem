@@ -1,15 +1,18 @@
 import {
   FileSystemPlugin as BaseFileSystemPlugin,
-  Directory,
   SystemDirectoryType,
 } from '@spryrocks/mobile-filesystem-plugin-core';
+import {CapPath} from './CapPath';
+import {Directory} from './Directory';
+import {mapSystemDirectoryToCap} from './Utils';
 
 export class FileSystemPlugin extends BaseFileSystemPlugin {
   isAvailable(): boolean {
-    throw new Error('Method not implemented.');
+    return true;
   }
 
-  getSystemDirectory(_type: SystemDirectoryType): Directory {
-    throw new Error('Method not implemented.');
+  getSystemDirectory(type: SystemDirectoryType) {
+    const capDirectory = mapSystemDirectoryToCap(type);
+    return new Directory(new CapPath(capDirectory, undefined));
   }
 }

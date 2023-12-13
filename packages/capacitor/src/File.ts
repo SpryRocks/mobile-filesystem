@@ -6,8 +6,13 @@ import {
   UseFileWriterBlock,
   UseFileWriterOptions,
 } from '@spryrocks/mobile-filesystem-plugin-core';
+import {CapPath} from './CapPath';
 
 export class File extends CoreFile {
+  constructor(_capPath: CapPath) {
+    super();
+  }
+
   override delete(): Promise<void> {
     throw new Error('Method not implemented.');
   }
