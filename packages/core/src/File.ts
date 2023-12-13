@@ -1,4 +1,5 @@
 import {Entry} from './Entry';
+import {FileWriter} from './FileWriter';
 
 export type FileMetadata = {
   modificationTime: Date;
@@ -13,6 +14,8 @@ type FileWriteBase = {
 export type FileWriteBlobOptions = FileWriteBase;
 export type FileWriteStringOptions = FileWriteBase;
 
+export type UseFileWriterBlock = (writer: FileWriter) => Promise<void>;
+
 export abstract class File extends Entry {
   abstract get name(): string;
   abstract delete(): Promise<void>;
@@ -24,4 +27,5 @@ export abstract class File extends Entry {
   abstract writeBlob(data: Blob, options?: FileWriteBlobOptions): Promise<void>;
   abstract readAsString(): Promise<string>;
   abstract readAsDataUrl(): Promise<string>;
+  abstract useFileWriter(block: UseFileWriterBlock): Promise<void>;
 }
