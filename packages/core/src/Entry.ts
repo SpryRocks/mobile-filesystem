@@ -1,3 +1,3 @@
-export abstract class IEntry {
+export abstract class Entry {
   abstract exists(): Promise<boolean>;
 }

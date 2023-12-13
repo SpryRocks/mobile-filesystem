@@ -3,14 +3,14 @@ import {
   DirectoryDeleteOptions,
   DirectoryGetFilesResult,
 } from '@spryrocks/mobile-filesystem-plugin-core';
-import {IDirectory, IFile} from '@spryrocks/mobile-filesystem-plugin-core';
+import {Directory as CoreDirectory, File} from '@spryrocks/mobile-filesystem-plugin-core';
 
-export class Directory extends IDirectory {
-  override getFile(_path: string): IFile {
+export class Directory extends CoreDirectory {
+  override getFile(_path: string): File {
     throw new Error('Method not implemented.');
   }
 
-  override getDirectory(_path: string): IDirectory {
+  override getDirectory(_path: string): Directory {
     throw new Error('Method not implemented.');
   }
 

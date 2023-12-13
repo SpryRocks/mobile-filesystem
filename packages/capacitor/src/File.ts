@@ -1,15 +1,13 @@
 import {
+  File as CoreFile,
   FileMetadata,
   FileOpenWriterOptions,
-  IFile,
-  IFileReader,
-  IFileWriter,
+  FileReader,
+  FileWriter,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 
-export class File extends IFile {
-  override openWriter(
-    _options?: FileOpenWriterOptions | undefined,
-  ): Promise<IFileWriter> {
+export class File extends CoreFile {
+  override openWriter(_options?: FileOpenWriterOptions | undefined): Promise<FileWriter> {
     throw new Error('Method not implemented.');
   }
 
@@ -17,7 +15,7 @@ export class File extends IFile {
     throw new Error('Method not implemented.');
   }
 
-  override copyTo(_destination: IFile): Promise<void> {
+  override copyTo(_destination: File): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -37,7 +35,7 @@ export class File extends IFile {
     throw new Error('Method not implemented.');
   }
 
-  override openReader(): Promise<IFileReader> {
+  override openReader(): Promise<FileReader> {
     throw new Error('Method not implemented.');
   }
 
