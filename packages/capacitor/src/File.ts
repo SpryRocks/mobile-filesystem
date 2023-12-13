@@ -4,6 +4,7 @@ import {
   FileWriteBlobOptions,
   FileWriteStringOptions,
   UseFileWriterBlock,
+  UseFileWriterOptions,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 
 export class File extends CoreFile {
@@ -51,7 +52,10 @@ export class File extends CoreFile {
     throw new Error('Method not implemented.');
   }
 
-  override useFileWriter(_block: UseFileWriterBlock): Promise<void> {
+  override useFileWriter(
+    _block: UseFileWriterBlock,
+    _options?: UseFileWriterOptions,
+  ): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

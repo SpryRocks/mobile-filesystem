@@ -15,6 +15,9 @@ export type FileWriteBlobOptions = FileWriteBase;
 export type FileWriteStringOptions = FileWriteBase;
 
 export type UseFileWriterBlock = (writer: FileWriter) => Promise<void>;
+export type UseFileWriterOptions = {
+  append?: boolean;
+};
 
 export abstract class File extends Entry {
   abstract get name(): string;
@@ -27,5 +30,8 @@ export abstract class File extends Entry {
   abstract writeBlob(data: Blob, options?: FileWriteBlobOptions): Promise<void>;
   abstract readAsString(): Promise<string>;
   abstract readAsDataUrl(): Promise<string>;
-  abstract useFileWriter(block: UseFileWriterBlock): Promise<void>;
+  abstract useFileWriter(
+    block: UseFileWriterBlock,
+    options?: UseFileWriterOptions,
+  ): Promise<void>;
 }
