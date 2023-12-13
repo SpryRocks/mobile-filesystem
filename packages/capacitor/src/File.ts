@@ -1,16 +1,6 @@
-import {
-  File as CoreFile,
-  FileMetadata,
-  FileOpenWriterOptions,
-  FileReader,
-  FileWriter,
-} from '@spryrocks/mobile-filesystem-plugin-core';
+import {File as CoreFile, FileMetadata} from '@spryrocks/mobile-filesystem-plugin-core';
 
 export class File extends CoreFile {
-  override openWriter(_options?: FileOpenWriterOptions | undefined): Promise<FileWriter> {
-    throw new Error('Method not implemented.');
-  }
-
   override delete(): Promise<void> {
     throw new Error('Method not implemented.');
   }
@@ -35,11 +25,23 @@ export class File extends CoreFile {
     throw new Error('Method not implemented.');
   }
 
-  override openReader(): Promise<FileReader> {
+  override create(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  override create(): Promise<void> {
+  override readAsString(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  override writeBlob(_data: Blob): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  override readAsDataUrl(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  override writeString(_data: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }
