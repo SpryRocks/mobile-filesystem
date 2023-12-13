@@ -1884,17 +1884,17 @@
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz#96116f2a912e0c02817345b3c10751069920d553"
   integrity sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==
 
-"@spryrocks/capacitor-filesystem-plugin@^0.0.2-alpha.32":
-  version "0.0.2-alpha.32"
-  resolved "https://registry.yarnpkg.com/@spryrocks/capacitor-filesystem-plugin/-/capacitor-filesystem-plugin-0.0.2-alpha.32.tgz#f572ea47e693df30ca27d4b57e9d28faa6a6a31d"
-  integrity sha512-JoG+0pRPsIgXYjSG+Vsyn40GgxU8WVfNrHKYxKoS/erlyMRqXIfGJFFh83EN8l6CX5cCjE3wDnbulgVEROUl1g==
+"@spryrocks/capacitor-filesystem-plugin@^0.0.2-alpha.35":
+  version "0.0.2-alpha.35"
+  resolved "https://registry.yarnpkg.com/@spryrocks/capacitor-filesystem-plugin/-/capacitor-filesystem-plugin-0.0.2-alpha.35.tgz#6acb6f5150036fa9d09dcc019cb188bed4ae50b5"
+  integrity sha512-V+YsquYpq7DczbIyF0y10lp5QbEhOAchX3McZWprQLnOFzmxGp7/TlPOZaUSfwQCBAHSI26Aih77jdpr4y1R9g==
   dependencies:
-    "@spryrocks/mobile-filesystem-plugin-core" "^0.0.2-alpha.32"
+    "@spryrocks/mobile-filesystem-plugin-core" "^0.0.2-alpha.35"
 
-"@spryrocks/mobile-filesystem-plugin-core@^0.0.2-alpha.32":
-  version "0.0.2-alpha.32"
-  resolved "https://registry.yarnpkg.com/@spryrocks/mobile-filesystem-plugin-core/-/mobile-filesystem-plugin-core-0.0.2-alpha.32.tgz#9fede7a199925f17c67d7a3a8e6de4841184b974"
-  integrity sha512-AZe17s0o9L74Rmd/gXeY+QauJgFm2J3pBvjNKsHZGYNnUePLbjEy5kOKtINJ2TekzEMn9wJ76GN4YpPnUYqS5w==
+"@spryrocks/mobile-filesystem-plugin-core@^0.0.2-alpha.35":
+  version "0.0.2-alpha.35"
+  resolved "https://registry.yarnpkg.com/@spryrocks/mobile-filesystem-plugin-core/-/mobile-filesystem-plugin-core-0.0.2-alpha.35.tgz#b52582dff11e56c10210c716ecf5e6aba9bd0f6b"
+  integrity sha512-LeevQqMrp5b1o2fFTMHfVYR/ja/4GQVNrA6C2QFV4tDbU1mnDM2oWrByPozop5544BbRNUc6Ddmfg/d4czgoog==
 
 "@stencil/core@^4.0.3", "@stencil/core@^4.8.1":
   version "4.8.2"
