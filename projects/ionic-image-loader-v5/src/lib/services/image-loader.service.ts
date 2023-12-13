@@ -5,7 +5,7 @@ import {Platform} from '@ionic/angular';
 import {fromEvent, Subject} from 'rxjs';
 import {filter, first, take} from 'rxjs/operators';
 import {ImageLoaderConfigService} from './image-loader-config.service';
-import {Directory, File, FileSystem, SystemDirectoryType} from "@spryrocks/capacitor-filesystem-plugin";
+import {Directory, File, FileSystemPlugin, SystemDirectoryType} from "@spryrocks/capacitor-filesystem-plugin";
 
 interface IndexItem {
     name: string;
@@ -94,7 +94,7 @@ export class ImageLoaderService {
     }
 
     get nativeAvailable(): boolean {
-        return FileSystem.isAvailable();
+        return FileSystemPlugin.isAvailable();
     }
 
     private get isCacheSpaceExceeded(): boolean {
@@ -154,7 +154,7 @@ export class ImageLoaderService {
         } else {
             type = SystemDirectoryType.Cache;
         }
-        return FileSystem.getSystemDirectory(type);
+        return FileSystemPlugin.getSystemDirectory(type);
     }
 
     /**
@@ -178,7 +178,7 @@ export class ImageLoaderService {
                 await route.getFile(fileName).delete();
 
                 if (this.isWKWebView && !this.isIonicWKWebView) {
-                    await FileSystem.getSystemDirectory(SystemDirectoryType.Temp).getFile(fileName).delete();
+                    await FileSystemPlugin.getSystemDirectory(SystemDirectoryType.Temp).getFile(fileName).delete();
                 }
             } catch (err) {
                 this.throwError(err);
@@ -206,7 +206,7 @@ export class ImageLoaderService {
                 if (this.isWKWebView && !this.isIonicWKWebView) {
                     // also clear the temp files
                     try {
-                        await FileSystem.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName)
+                        await FileSystemPlugin.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName)
                             .delete({recursively: true});
                     } catch (err) {
                         // Noop catch. Removing the tempDirectory might fail,
@@ -535,7 +535,7 @@ export class ImageLoaderService {
 
         if (this.isWKWebView && !this.isIonicWKWebView) {
             try {
-                await FileSystem.getSystemDirectory(SystemDirectoryType.Temp)
+                await FileSystemPlugin.getSystemDirectory(SystemDirectoryType.Temp)
                     .getDirectory(this.config.cacheDirectoryName)
                     .getFile(file)
                     .delete();
@@ -567,7 +567,7 @@ export class ImageLoaderService {
 
         // get full path
         const dir = this.getFileCacheDirectory().getDirectory(this.config.cacheDirectoryName);
-        const tempDir = FileSystem.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName);
+        const tempDir = FileSystemPlugin.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName);
 
         try {
             // check if exists
@@ -694,7 +694,7 @@ export class ImageLoaderService {
         }
 
         if (this.isWKWebView && !this.isIonicWKWebView) {
-            const tempDir = FileSystem.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName);
+            const tempDir = FileSystemPlugin.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName);
             if (replace) {
                 // create or replace the temp directory
                 tempDirectoryPromise = tempDir.create({replace: replace});
