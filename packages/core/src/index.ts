@@ -1,4 +1,4 @@
 export {IFileSystem} from './IFileSystem';
-export {IFile} from './IFile';
-export {IDirectory} from './IDirectory';
+export * from './IFile';
+export * from './IDirectory';
 export {IFileWriter} from './IFileWriter';

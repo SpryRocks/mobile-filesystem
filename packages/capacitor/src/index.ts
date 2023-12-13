@@ -8,3 +8,4 @@ const fileSystem: IFileSystem<SystemDirectoryType> = null;
 export * from '@spryrocks/mobile-filesystem-plugin-core';
 export {fileSystem as FileSystem, SystemDirectoryType};
 export {File} from './File';
+export {Directory} from './Directory';

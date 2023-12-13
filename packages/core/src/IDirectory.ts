@@ -1,14 +1,14 @@
 import {IEntry} from './IEntry';
 import {IFile} from './IFile';
 
-export type DeleteOptions = {
+export type DirectoryDeleteOptions = {
   recursively?: boolean;
 };
-export type GetFilesResult = IFile[];
+export type DirectoryGetFilesResult = IFile[];
 
 export abstract class IDirectory extends IEntry {
   abstract getFile(path: string): IFile;
   abstract getDirectory(path: string): IDirectory;
-  abstract delete(options?: DeleteOptions): Promise<void>;
-  abstract getFiles(): Promise<GetFilesResult>;
+  abstract delete(options?: DirectoryDeleteOptions): Promise<void>;
+  abstract getFiles(): Promise<DirectoryGetFilesResult>;
 }

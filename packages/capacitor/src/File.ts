@@ -1,11 +1,13 @@
 import {IFile, IFileWriter} from '@spryrocks/mobile-filesystem-plugin-core';
 import {
   FileMetadata,
-  OpenWriterOptions,
+  FileOpenWriterOptions,
 } from '@spryrocks/mobile-filesystem-plugin-core/dist/esm/IFile';
 
 export class File extends IFile {
-  override openWriter(_options?: OpenWriterOptions | undefined): Promise<IFileWriter> {
+  override openWriter(
+    _options?: FileOpenWriterOptions | undefined,
+  ): Promise<IFileWriter> {
     throw new Error('Method not implemented.');
   }
 
