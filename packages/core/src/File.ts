@@ -9,6 +9,10 @@ export type FileMetadata = {
   size: number;
 };
 
+export type FileWriteStringOptions = {
+  append: boolean;
+};
+
 export abstract class File extends Entry {
   abstract get name(): string;
   abstract delete(): Promise<void>;
@@ -16,7 +20,7 @@ export abstract class File extends Entry {
   abstract getMetadata(): Promise<FileMetadata>;
   abstract get url(): string;
   abstract create(): Promise<void>;
-  abstract writeString(data: string): Promise<void>;
+  abstract writeString(data: string, options?: FileWriteStringOptions): Promise<void>;
   abstract writeBlob(data: Blob): Promise<void>;
   abstract readAsString(): Promise<void>;
   abstract readAsDataUrl(): Promise<void>;

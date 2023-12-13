@@ -1,4 +1,8 @@
-import {File as CoreFile, FileMetadata} from '@spryrocks/mobile-filesystem-plugin-core';
+import {
+  File as CoreFile,
+  FileMetadata,
+  FileWriteStringOptions,
+} from '@spryrocks/mobile-filesystem-plugin-core';
 
 export class File extends CoreFile {
   override delete(): Promise<void> {
@@ -41,7 +45,7 @@ export class File extends CoreFile {
     throw new Error('Method not implemented.');
   }
 
-  override writeString(_data: string): Promise<void> {
+  override writeString(_data: string, _options?: FileWriteStringOptions): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }
