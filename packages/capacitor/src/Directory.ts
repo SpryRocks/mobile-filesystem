@@ -11,14 +11,14 @@ import {
 } from '@spryrocks/mobile-filesystem-plugin-core';
 
 export class Directory extends CoreDirectory {
-  override getFile(_path: string): File {
+  override getFile(_path: string): Promise<File> {
     throw new Error('Method not implemented.');
   }
 
   override getDirectory(
     _path: string,
     _options?: DirectoryGetDirectoryOptions,
-  ): Directory {
+  ): Promise<Directory> {
     throw new Error('Method not implemented.');
   }
 

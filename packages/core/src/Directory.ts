@@ -16,11 +16,11 @@ export type DirectoryCreateOptions = {
 };
 
 export abstract class Directory extends Entry {
-  abstract getFile(path: string): DirectoryGetFileResult;
+  abstract getFile(path: string): Promise<DirectoryGetFileResult>;
   abstract getDirectory(
     path: string,
     options?: DirectoryGetDirectoryOptions,
-  ): DirectoryGetDirectoryResult;
+  ): Promise<DirectoryGetDirectoryResult>;
   abstract delete(options?: DirectoryDeleteOptions): Promise<void>;
   abstract getFiles(): Promise<DirectoryGetFilesResult>;
   abstract getDirectories(): Promise<DirectoryGetDirectoriesResult>;
