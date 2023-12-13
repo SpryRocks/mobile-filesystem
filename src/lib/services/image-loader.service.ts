@@ -1,11 +1,11 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {File, FileEntry} from '@ionic-native/file/ngx';
 import {WebView} from '@ionic-native/ionic-webview/ngx';
 import {Platform} from '@ionic/angular';
 import {fromEvent, Subject} from 'rxjs';
 import {filter, first, take} from 'rxjs/operators';
 import {ImageLoaderConfigService} from './image-loader-config.service';
+import {Directory, File, FileSystem, SystemDirectoryType} from "@spryrocks/capacitor-filesystem-plugin";
 
 interface IndexItem {
     name: string;
@@ -62,7 +62,6 @@ export class ImageLoaderService {
 
     constructor(
         private config: ImageLoaderConfigService,
-        private file: File,
         private http: HttpClient,
         private platform: Platform,
         private webview: WebView,
@@ -95,7 +94,7 @@ export class ImageLoaderService {
     }
 
     get nativeAvailable(): boolean {
-        return File.installed();
+        return FileSystem.isAvailable();
     }
 
     private get isCacheSpaceExceeded(): boolean {
@@ -147,12 +146,15 @@ export class ImageLoaderService {
     }
 
     getFileCacheDirectory() {
+        let type: SystemDirectoryType;
         if (this.config.cacheDirectoryType === 'data') {
-            return this.file.dataDirectory;
+            type = SystemDirectoryType.Data;
         } else if (this.config.cacheDirectoryType === 'external') {
-            return this.platform.is('android') ? this.file.externalDataDirectory : this.file.documentsDirectory;
+            type = this.platform.is('android') ? SystemDirectoryType.ExternalData : SystemDirectoryType.Documents;
+        } else {
+            type = SystemDirectoryType.Cache;
         }
-        return this.file.cacheDirectory;
+        return FileSystem.getSystemDirectory(type);
     }
 
     /**
@@ -168,15 +170,15 @@ export class ImageLoaderService {
 
         this.runLocked(async () => {
             const fileName = this.createFileName(imageUrl);
-            const route = this.getFileCacheDirectory() + this.config.cacheDirectoryName;
+            const route = await this.getFileCacheDirectory().getDirectory(this.config.cacheDirectoryName);
             // pause any operations
             this.isInit = false;
 
             try {
-                await this.file.removeFile(route, fileName);
+                await route.getFile(fileName).delete();
 
                 if (this.isWKWebView && !this.isIonicWKWebView) {
-                    await this.file.removeFile(this.file.tempDirectory + this.config.cacheDirectoryName, fileName);
+                    await FileSystem.getSystemDirectory(SystemDirectoryType.Temp).getFile(fileName).delete();
                 }
             } catch (err) {
                 this.throwError(err);
@@ -198,12 +200,14 @@ export class ImageLoaderService {
 
         this.runLocked(async () => {
             try {
-                await this.file.removeRecursively(this.getFileCacheDirectory(), this.config.cacheDirectoryName);
+                await this.getFileCacheDirectory().getDirectory(this.config.cacheDirectoryName)
+                    .delete({recursively: true});
 
                 if (this.isWKWebView && !this.isIonicWKWebView) {
                     // also clear the temp files
                     try {
-                        this.file.removeRecursively(this.file.tempDirectory, this.config.cacheDirectoryName);
+                        await FileSystem.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName)
+                            .delete({recursively: true});
                     } catch (err) {
                         // Noop catch. Removing the tempDirectory might fail,
                         // as it is not persistent.
@@ -383,7 +387,7 @@ export class ImageLoaderService {
                 this.processQueue();
             }
 
-            const localDir = this.getFileCacheDirectory() + this.config.cacheDirectoryName + '/';
+            const localDir = this.getFileCacheDirectory().getDirectory(this.config.cacheDirectoryName);
             const fileName = this.createFileName(currentItem.imageUrl);
 
             try {
@@ -392,7 +396,9 @@ export class ImageLoaderService {
                     headers: this.config.httpHeaders,
                 }).toPromise();
 
-                const file = await this.file.writeFile(localDir, fileName, data, {replace: true}) as FileEntry;
+                const file = localDir.getFile(fileName);
+                const writer = await file.openWriter({replace: true});
+                await writer.writeBlob(data);
 
                 if (this.isCacheSpaceExceeded) {
                     this.maintainCacheSize();
@@ -444,8 +450,8 @@ export class ImageLoaderService {
      * Also deletes any files if they are older than the set maximum cache age.
      * @param file FileEntry to index
      */
-    private async addFileToIndex(file: FileEntry): Promise<any> {
-        const metadata = await new Promise<any>((resolve, reject) => file.getMetadata(resolve, reject));
+    private async addFileToIndex(file: File): Promise<any> {
+        const metadata = await file.getMetadata();
 
         if (
             this.config.maxCacheAge > -1 &&
@@ -474,7 +480,7 @@ export class ImageLoaderService {
         this.cacheIndex = [];
 
         try {
-            const files = await this.file.listDir(this.getFileCacheDirectory(), this.config.cacheDirectoryName);
+            const files = await this.getFileCacheDirectory().getDirectory(this.config.cacheDirectoryName).getFiles();
             await Promise.all(files.map(this.addFileToIndex.bind(this)));
             // Sort items by date. Most recent to oldest.
             this.cacheIndex = this.cacheIndex.sort(
@@ -523,11 +529,17 @@ export class ImageLoaderService {
      * @param file The name of the file to remove
      */
     private async removeFile(file: string): Promise<any> {
-        await this.file.removeFile(this.getFileCacheDirectory() + this.config.cacheDirectoryName, file);
+        await this.getFileCacheDirectory()
+            .getDirectory(this.config.cacheDirectoryName)
+            .getFile(file)
+            .delete();
 
         if (this.isWKWebView && !this.isIonicWKWebView) {
             try {
-                return this.file.removeFile(this.file.tempDirectory + this.config.cacheDirectoryName, file);
+                await FileSystem.getSystemDirectory(SystemDirectoryType.Temp)
+                    .getDirectory(this.config.cacheDirectoryName)
+                    .getFile(file)
+                    .delete();
             } catch (err) {
                 // Noop catch. Removing the files from tempDirectory might fail, as it is not persistent.
             }
@@ -555,19 +567,19 @@ export class ImageLoaderService {
         const fileName = this.createFileName(url);
 
         // get full path
-        const dirPath = this.getFileCacheDirectory() + this.config.cacheDirectoryName,
-            tempDirPath = this.file.tempDirectory + this.config.cacheDirectoryName;
+        const dir = this.getFileCacheDirectory().getDirectory(this.config.cacheDirectoryName);
+        const tempDir = FileSystem.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName);
 
         try {
             // check if exists
-            const fileEntry = await this.file.resolveLocalFilesystemUrl(dirPath + '/' + fileName) as FileEntry;
+            const fileEntry = await this.resolveLocalFile(dir, fileName);
 
             // file exists in cache
             if (this.config.imageReturnType === 'base64') {
                 // read the file as data url and return the base64 string.
                 // should always be successful as the existence of the file
                 // is already ensured
-                const base64: string = await this.file.readAsDataURL(dirPath, fileName);
+                const base64: string = await this.readFileAsDataURL(fileEntry);
                 return base64.replace('data:null', 'data:*/*');
             } else if (this.config.imageReturnType !== 'uri') {
                 return;
@@ -582,20 +594,20 @@ export class ImageLoaderService {
 
             if (!this.isWKWebView) {
                 // return native path
-                return fileEntry.nativeURL;
+                return fileEntry.url;
             }
 
             // check if file already exists in temp directory
             try {
-                const tempFileEntry = await this.file.resolveLocalFilesystemUrl(tempDirPath + '/' + fileName) as FileEntry;
+                const tempFileEntry = await this.resolveLocalFile(tempDir, fileName);
                 // file exists in temp directory
                 // return native path
                 return this.normalizeUrl(tempFileEntry);
             } catch (err) {
                 // file does not yet exist in the temp directory.
                 // copy it!
-                const tempFileEntry = await this.file
-                    .copyFile(dirPath, fileName, tempDirPath, fileName) as FileEntry;
+                const tempFileEntry = tempDir.getFile(fileName);
+                await dir.getFile(fileName).copyTo(tempFileEntry);
 
                 // now the file exists in the temp directory
                 // return native path
@@ -606,22 +618,30 @@ export class ImageLoaderService {
         }
     }
 
+    private async resolveLocalFile(dir: Directory, fileName: string): Promise<File> {
+        const file = dir.getFile(fileName);
+        if (!(await file.exists())) {
+            throw new Error("File not exists");
+        }
+        return file;
+    }
+
     /**
      * Normalizes the image uri to a version that can be loaded in the webview
      * @param fileEntry the FileEntry of the image file
      * @returns the normalized Url
      */
 
-    private normalizeUrl(fileEntry: FileEntry): string {
+    private normalizeUrl(fileEntry: File): string {
         // Use Ionic normalizeUrl to generate the right URL for Ionic WKWebView
         if (Ionic && typeof Ionic.normalizeURL === 'function') {
-            return Ionic.normalizeURL(fileEntry.nativeURL);
+            return Ionic.normalizeURL(fileEntry.url);
         }
         // use new webview function to do the trick
         if (this.webview) {
-            return this.webview.convertFileSrc(fileEntry.nativeURL);
+            return this.webview.convertFileSrc(fileEntry.url);
         }
-        return fileEntry.nativeURL;
+        return fileEntry.url;
     }
 
     /**
@@ -651,8 +671,8 @@ export class ImageLoaderService {
      * @param directory The directory to check. Either this.file.tempDirectory or this.getFileCacheDirectory()
      * @returns Returns a promise that resolves if exists, and rejects if it doesn't
      */
-    private cacheDirectoryExists(directory: string): Promise<boolean> {
-        return this.file.checkDir(directory, this.config.cacheDirectoryName);
+    private async directoryExistsOrThrow(directory: Directory): Promise<void> {
+        if (!(directory.exists())) throw new Error("Directory not exists");
     }
 
     /**
@@ -663,36 +683,27 @@ export class ImageLoaderService {
     private createCacheDirectory(replace: boolean = false): Promise<any> {
         let cacheDirectoryPromise: Promise<any>, tempDirectoryPromise: Promise<any>;
 
+        const cacheDir = this.getFileCacheDirectory().getDirectory(this.config.cacheDirectoryName);
         if (replace) {
             // create or replace the cache directory
-            cacheDirectoryPromise = this.file.createDir(this.getFileCacheDirectory(), this.config.cacheDirectoryName, replace);
+            cacheDirectoryPromise = cacheDir.create({replace: replace});
         } else {
             // check if the cache directory exists.
             // if it does not exist create it!
-            cacheDirectoryPromise = this.cacheDirectoryExists(this.getFileCacheDirectory())
-                .catch(() => this.file.createDir(this.getFileCacheDirectory(), this.config.cacheDirectoryName, false));
+            cacheDirectoryPromise = this.directoryExistsOrThrow(cacheDir)
+                .catch(() => cacheDir.create({replace: false}));
         }
 
         if (this.isWKWebView && !this.isIonicWKWebView) {
+            const tempDir = FileSystem.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName);
             if (replace) {
                 // create or replace the temp directory
-                tempDirectoryPromise = this.file.createDir(
-                    this.file.tempDirectory,
-                    this.config.cacheDirectoryName,
-                    replace,
-                );
+                tempDirectoryPromise = tempDir.create({replace: replace});
             } else {
                 // check if the temp directory exists.
                 // if it does not exist create it!
-                tempDirectoryPromise = this.cacheDirectoryExists(
-                    this.file.tempDirectory,
-                ).catch(() =>
-                    this.file.createDir(
-                        this.file.tempDirectory,
-                        this.config.cacheDirectoryName,
-                        false,
-                    ),
-                );
+                tempDirectoryPromise = this.directoryExistsOrThrow(tempDir)
+                    .catch(() => tempDir.create({replace: false}));
             }
         } else {
             tempDirectoryPromise = Promise.resolve();
@@ -753,5 +764,10 @@ export class ImageLoaderService {
         return (
             EXTENSIONS.indexOf(ext) >= 0 ? ext : this.config.fallbackFileNameCachedExtension
         );
+    }
+
+    private async readFileAsDataURL(file: File): Promise<string> {
+        const reader = await file.openReader();
+        return reader.readAsDataUrl();
     }
 }

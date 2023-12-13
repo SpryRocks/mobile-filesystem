@@ -13,6 +13,9 @@
     "ionic",
     "angular8"
   ],
+  "peerDependencies": {
+    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.9"
+  },
   "devDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/compiler": "~8.2.14",
@@ -21,14 +24,12 @@
     "@angular/forms": "~8.2.14",
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
-    "@ionic-native/core": "^5.0.7",
-    "@ionic-native/file": "^5.23.0",
+    "@ionic-native/ionic-webview": "^5.36.0",
+    "@ionic/angular": "^7.6.0",
     "codelyzer": "^5.0.0",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
-    "zone.js": "~0.9.1"
-  },
-  "peerDependencies": {
-    "@ionic-native/file": "^5.0.0"
+    "zone.js": "~0.9.1",
+    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.22"
   }
 }

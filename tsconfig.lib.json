@@ -1,10 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/lib",
+    "outDir": "dist",
     "target": "es2015",
     "declaration": true,
     "inlineSources": true,
+    "moduleResolution": "NodeNext",
     "types": [],
     "lib": [
       "dom",
