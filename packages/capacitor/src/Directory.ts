@@ -1,6 +1,7 @@
 import {
   Directory as CoreDirectory,
   DirectoryGetDirectoriesResult,
+  DirectoryGetDirectoryOptions,
   File,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 import {
@@ -14,7 +15,10 @@ export class Directory extends CoreDirectory {
     throw new Error('Method not implemented.');
   }
 
-  override getDirectory(_path: string): Directory {
+  override getDirectory(
+    _path: string,
+    _options?: DirectoryGetDirectoryOptions,
+  ): Directory {
     throw new Error('Method not implemented.');
   }
 
