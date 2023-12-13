@@ -16,4 +16,5 @@ export abstract class IFile extends IEntry {
   abstract delete(): Promise<void>;
   abstract copyToPath(path: string): Promise<IFile>;
   abstract getMetadata(): Promise<FileMetadata>;
+  abstract get url(): string;
 }

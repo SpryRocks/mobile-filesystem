@@ -30,4 +30,8 @@ export class File extends IFile {
   override get name(): string {
     throw new Error('Method not implemented.');
   }
+
+  override get url(): string {
+    throw new Error('Method not implemented.');
+  }
 }
