@@ -1,27 +1,27 @@
 import {Entry} from './Entry';
 
-export type FileOpenWriterOptions = {
-  replace?: boolean;
-};
-
 export type FileMetadata = {
   modificationTime: Date;
   size: number;
 };
 
-export type FileWriteStringOptions = {
-  append: boolean;
+type FileWriteBase = {
+  append?: boolean;
+  replace?: boolean;
 };
+
+export type FileWriteBlobOptions = FileWriteBase;
+export type FileWriteStringOptions = FileWriteBase;
 
 export abstract class File extends Entry {
   abstract get name(): string;
   abstract delete(): Promise<void>;
   abstract copyTo(destination: File): Promise<void>;
   abstract getMetadata(): Promise<FileMetadata>;
-  abstract get url(): string;
+  abstract get path(): string;
   abstract create(): Promise<void>;
   abstract writeString(data: string, options?: FileWriteStringOptions): Promise<void>;
-  abstract writeBlob(data: Blob): Promise<void>;
+  abstract writeBlob(data: Blob, options?: FileWriteBlobOptions): Promise<void>;
   abstract readAsString(): Promise<string>;
   abstract readAsDataUrl(): Promise<string>;
 }

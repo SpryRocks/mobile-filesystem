@@ -1,6 +1,7 @@
 import {
   File as CoreFile,
   FileMetadata,
+  FileWriteBlobOptions,
   FileWriteStringOptions,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 
@@ -25,7 +26,7 @@ export class File extends CoreFile {
     throw new Error('Method not implemented.');
   }
 
-  override get url(): string {
+  override get path(): string {
     throw new Error('Method not implemented.');
   }
 
@@ -37,7 +38,7 @@ export class File extends CoreFile {
     throw new Error('Method not implemented.');
   }
 
-  override writeBlob(_data: Blob): Promise<void> {
+  override writeBlob(_data: Blob, _options?: FileWriteBlobOptions): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
