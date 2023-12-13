@@ -19,4 +19,5 @@ export abstract class IFile extends IEntry {
   abstract copyTo(destination: IFile): Promise<void>;
   abstract getMetadata(): Promise<FileMetadata>;
   abstract get url(): string;
+  abstract create(): Promise<void>;
 }

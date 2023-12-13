@@ -40,4 +40,8 @@ export class File extends IFile {
   override openReader(): Promise<IFileReader> {
     throw new Error('Method not implemented.');
   }
+
+  override create(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 }
