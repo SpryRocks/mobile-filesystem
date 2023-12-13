@@ -1,8 +1,10 @@
-import {IFile, IFileWriter} from '@spryrocks/mobile-filesystem-plugin-core';
 import {
   FileMetadata,
   FileOpenWriterOptions,
-} from '@spryrocks/mobile-filesystem-plugin-core/dist/esm/IFile';
+  IFile,
+  IFileReader,
+  IFileWriter,
+} from '@spryrocks/mobile-filesystem-plugin-core';
 
 export class File extends IFile {
   override openWriter(
@@ -32,6 +34,10 @@ export class File extends IFile {
   }
 
   override get url(): string {
+    throw new Error('Method not implemented.');
+  }
+
+  override openReader(): Promise<IFileReader> {
     throw new Error('Method not implemented.');
   }
 }
