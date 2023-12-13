@@ -8,4 +8,3 @@ export * from '@spryrocks/mobile-filesystem-plugin-core';
 export {fileSystem as FileSystem};
 export {File} from './File';
 export {Directory} from './Directory';
-export * from './utils/BlobUtils';

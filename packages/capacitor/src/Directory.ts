@@ -1,9 +1,13 @@
 import {
+  Directory as CoreDirectory,
+  DirectoryGetDirectoriesResult,
+  File,
+} from '@spryrocks/mobile-filesystem-plugin-core';
+import {
   DirectoryCreateOptions,
   DirectoryDeleteOptions,
   DirectoryGetFilesResult,
 } from '@spryrocks/mobile-filesystem-plugin-core';
-import {Directory as CoreDirectory, File} from '@spryrocks/mobile-filesystem-plugin-core';
 
 export class Directory extends CoreDirectory {
   override getFile(_path: string): File {
@@ -27,6 +31,10 @@ export class Directory extends CoreDirectory {
   }
 
   override create(_options?: DirectoryCreateOptions): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  override getDirectories(): Promise<DirectoryGetDirectoriesResult> {
     throw new Error('Method not implemented.');
   }
 }
