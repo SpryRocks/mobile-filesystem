@@ -397,8 +397,7 @@ export class ImageLoaderService {
                 }).toPromise();
 
                 const file = localDir.getFile(fileName);
-                const writer = await file.openWriter({replace: true});
-                await writer.writeBlob(data);
+                await file.writeBlob(data, {replace: true});
 
                 if (this.isCacheSpaceExceeded) {
                     this.maintainCacheSize();
@@ -579,7 +578,7 @@ export class ImageLoaderService {
                 // read the file as data url and return the base64 string.
                 // should always be successful as the existence of the file
                 // is already ensured
-                const base64: string = await this.readFileAsDataURL(fileEntry);
+                const base64: string = await fileEntry.readAsDataUrl();
                 return base64.replace('data:null', 'data:*/*');
             } else if (this.config.imageReturnType !== 'uri') {
                 return "";
@@ -594,7 +593,7 @@ export class ImageLoaderService {
 
             if (!this.isWKWebView) {
                 // return native path
-                return fileEntry.url;
+                return fileEntry.path;
             }
 
             // check if file already exists in temp directory
@@ -635,13 +634,13 @@ export class ImageLoaderService {
     private normalizeUrl(fileEntry: File): string {
         // Use Ionic normalizeUrl to generate the right URL for Ionic WKWebView
         if (Ionic && typeof Ionic.normalizeURL === 'function') {
-            return Ionic.normalizeURL(fileEntry.url);
+            return Ionic.normalizeURL(fileEntry.path);
         }
         // use new webview function to do the trick
         if (this.webview) {
-            return this.webview.convertFileSrc(fileEntry.url);
+            return this.webview.convertFileSrc(fileEntry.path);
         }
-        return fileEntry.url;
+        return fileEntry.path;
     }
 
     /**
@@ -764,10 +763,5 @@ export class ImageLoaderService {
         return (
             EXTENSIONS.indexOf(ext) >= 0 ? ext : this.config.fallbackFileNameCachedExtension
         );
-    }
-
-    private async readFileAsDataURL(file: File): Promise<string> {
-        const reader = await file.openReader();
-        return reader.readAsDataUrl();
     }
 }
