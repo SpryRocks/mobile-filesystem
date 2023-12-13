@@ -15,7 +15,7 @@ export class File extends IFile {
     throw new Error('Method not implemented.');
   }
 
-  override copyToPath(_path: string): Promise<IFile> {
+  override copyTo(_destination: IFile): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
