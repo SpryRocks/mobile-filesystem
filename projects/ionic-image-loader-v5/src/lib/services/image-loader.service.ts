@@ -62,7 +62,7 @@ export class ImageLoaderService {
 
   constructor(
     private config: ImageLoaderConfigService,
-    private http: HttpClient,
+    protected readonly http: HttpClient,
     private platform: Platform,
     private webview: WebView,
   ) {
