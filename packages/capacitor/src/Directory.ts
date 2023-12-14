@@ -33,7 +33,9 @@ export class Directory extends CoreDirectory<File, Directory> {
   override async getFile(path: string, options?: DirectoryGetFileOptions): Promise<File> {
     const file = new File(this.capPath.subPath(path));
     if (options?.create) {
-      await file.create();
+      if (!(await file.exists())) {
+        await file.create();
+      }
     }
     return file;
   }
