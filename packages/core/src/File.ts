@@ -11,15 +11,18 @@ export type FileWriteOptions = {
 };
 
 export type FileReadBytesResult = Uint8Array;
-
 export type FileWriteBytesData = Uint8Array;
-export type FileWriteStringOptions = FileWriteOptions;
+export type FileWriteBytesOptions = FileWriteOptions;
+export type FileWriteBytesResult = void;
+
+export type FileReadBase64Result = string;
+export type FileWriteBase64Data = string;
+export type FileWriteBase64Options = FileWriteOptions;
+export type FileWriteBase64Result = void;
 
 export type FileReadAsStringResult = string;
-
 export type FileWriteAsStringData = string;
 export type FileWriteAsStringOptions = FileWriteOptions;
-
 export type FileWriteAsStringResult = void;
 
 export abstract class File<
@@ -34,8 +37,14 @@ export abstract class File<
   abstract readBytes(): Promise<FileReadBytesResult>;
   abstract writeBytes(
     data: FileWriteBytesData,
-    options?: FileWriteStringOptions,
-  ): Promise<void>;
+    options?: FileWriteBytesOptions,
+  ): Promise<FileWriteBytesResult>;
+
+  abstract readBase64(): Promise<FileReadBase64Result>;
+  abstract writeBase64(
+    data: FileWriteBase64Data,
+    options?: FileWriteBase64Options,
+  ): Promise<FileWriteBase64Result>;
 
   abstract readAsString(): Promise<FileReadAsStringResult>;
   abstract writeAsString(

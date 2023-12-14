@@ -10,12 +10,17 @@ import {
   File as CoreFile,
   FileMetadata,
   FileReadAsStringResult,
+  FileReadBase64Result,
   FileReadBytesResult,
   FileWriteAsStringData,
   FileWriteAsStringOptions,
   FileWriteAsStringResult,
+  FileWriteBase64Data,
+  FileWriteBase64Options,
+  FileWriteBase64Result,
   FileWriteBytesData,
-  FileWriteStringOptions,
+  FileWriteBytesOptions,
+  FileWriteBytesResult,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 import {CapPath} from './CapPath';
 import {Directory} from './Directory';
@@ -83,10 +88,21 @@ export class File extends CoreFile<File, Directory> {
 
   override async writeBytes(
     data: FileWriteBytesData,
-    options?: FileWriteStringOptions,
-  ): Promise<void> {
+    options?: FileWriteBytesOptions,
+  ): Promise<FileWriteBytesResult> {
     const base64String = byteArrayToBase64(data);
     await this.writeInternal('base64', base64String, options?.append ?? false);
+  }
+
+  override readBase64(): Promise<FileReadBase64Result> {
+    return this.readInternal('base64');
+  }
+
+  override async writeBase64(
+    data: FileWriteBase64Data,
+    options?: FileWriteBase64Options,
+  ): Promise<FileWriteBase64Result> {
+    await this.writeInternal('base64', data, options?.append ?? false);
   }
 
   override readAsString(): Promise<FileReadAsStringResult> {
