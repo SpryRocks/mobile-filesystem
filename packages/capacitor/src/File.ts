@@ -34,13 +34,8 @@ export class File extends CoreFile<File, Directory> {
         directory: this.capPath.directory,
         path: this.capPath.path,
       });
-      if (result.type !== 'file') {
-        return false;
-      }
-      console.log('Directory', 'exists', 'ok', result);
-      return true;
+      return result.type === 'file';
     } catch (e) {
-      console.error('Directory', 'exists', e);
       return false;
     }
   }

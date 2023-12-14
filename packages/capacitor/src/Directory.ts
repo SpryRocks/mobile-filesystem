@@ -24,13 +24,8 @@ export class Directory extends CoreDirectory<File, Directory> {
         directory: this.capPath.directory,
         path: this.capPath.path,
       });
-      if (result.type !== 'directory') {
-        return false;
-      }
-      console.log('Directory', 'exists', 'ok', result);
-      return true;
+      return result.type === 'directory';
     } catch (e) {
-      console.error('Directory', 'exists', e);
       return false;
     }
   }
@@ -49,7 +44,7 @@ export class Directory extends CoreDirectory<File, Directory> {
   ): Promise<Directory> {
     const directory = new Directory(this.capPath.subPath(path));
     if (options?.create) {
-      if (!(await this.exists())) {
+      if (!(await directory.exists())) {
         await directory.create();
       }
     }
