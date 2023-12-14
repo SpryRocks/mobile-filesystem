@@ -43,7 +43,7 @@ export abstract class File<
     options?: FileWriteAsStringOptions,
   ): Promise<void>;
 
-  abstract useWriter(
+  abstract useFileWriter(
     block: FileUseWriterBlock,
     options?: FileUseWriterOptions,
   ): Promise<void>;

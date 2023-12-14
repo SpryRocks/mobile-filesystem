@@ -128,7 +128,7 @@ export class File extends CoreFile<File, Directory> {
     return result.uri;
   }
 
-  override async useWriter(
+  override async useFileWriter(
     block: FileUseWriterBlock,
     options?: FileUseWriterOptions,
   ): Promise<void> {

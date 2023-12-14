@@ -16,7 +16,7 @@ export class FileWriter extends CoreFileWriter {
     await FileWriter.writeInternal(this.capPath, 'base64', data, true);
   }
 
-  override async writeAsString(data: string): Promise<void> {
+  override async writeString(data: string): Promise<void> {
     await FileWriter.writeInternal(this.capPath, 'string', data, true);
   }
 

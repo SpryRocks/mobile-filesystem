@@ -9,7 +9,7 @@ export abstract class FileWriter {
     data: FileWriterWriteBase64Data,
   ): Promise<FileWriterWriteBase64Result>;
 
-  abstract writeAsString(
+  abstract writeString(
     data: FileWriterWriteAsStringData,
   ): Promise<FileWriterWriteAsStringResult>;
 }
