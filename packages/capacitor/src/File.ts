@@ -141,4 +141,12 @@ export class File extends CoreFile<File, Directory> {
   override get name(): string {
     return this.capPath.getName();
   }
+
+  override async getUri(): Promise<string> {
+    const result = await CapFileSystem.getUri({
+      directory: this.capPath.directory,
+      path: this.capPath.path,
+    });
+    return result.uri;
+  }
 }

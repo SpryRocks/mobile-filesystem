@@ -53,4 +53,6 @@ export abstract class File<
   ): Promise<FileWriteAsStringResult>;
 
   abstract get name(): string;
+
+  abstract getUri(): Promise<string>;
 }
