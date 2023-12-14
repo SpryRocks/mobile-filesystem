@@ -9,6 +9,7 @@ export type FileMetadata = {
 
 export type FileWriteOptions = {
   append?: boolean;
+  createDirectoryRecursive?: boolean;
 };
 
 export type FileReadBytesResult = Uint8Array;
@@ -61,4 +62,6 @@ export abstract class File<
   abstract get name(): string;
 
   abstract getUri(): Promise<string>;
+
+  abstract parent(): TDirectory;
 }

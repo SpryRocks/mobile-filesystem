@@ -18,13 +18,17 @@ import {
   FileWriteBase64Options,
   FileWriteBytesData,
   FileWriteBytesOptions,
+  FileWriteOptions,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 import {CapPath} from './CapPath';
 import {Directory} from './Directory';
 import {FileWriter} from './FileWriter';
 
 export class File extends CoreFile<File, Directory> {
-  constructor(private readonly capPath: CapPath) {
+  constructor(
+    private readonly capPath: CapPath,
+    private readonly parent_: Directory,
+  ) {
     super();
   }
 
@@ -83,13 +87,11 @@ export class File extends CoreFile<File, Directory> {
     data: FileWriteBytesData,
     options?: FileWriteBytesOptions,
   ): Promise<void> {
+    await this.prepareBeforeWrite(options);
     const base64String = byteArrayToBase64(data);
-    await FileWriter.writeInternal(
-      this.capPath,
-      'base64',
-      base64String,
-      options?.append ?? false,
-    );
+    await FileWriter.writeInternal(this.capPath, 'base64', base64String, {
+      append: options?.append ?? false,
+    });
   }
 
   override readBase64(): Promise<FileReadBase64Result> {
@@ -100,12 +102,10 @@ export class File extends CoreFile<File, Directory> {
     data: FileWriteBase64Data,
     options?: FileWriteBase64Options,
   ): Promise<void> {
-    await FileWriter.writeInternal(
-      this.capPath,
-      'base64',
-      data,
-      options?.append ?? false,
-    );
+    await this.prepareBeforeWrite(options);
+    await FileWriter.writeInternal(this.capPath, 'base64', data, {
+      append: options?.append ?? false,
+    });
   }
 
   override readAsString(): Promise<FileReadAsStringResult> {
@@ -116,12 +116,10 @@ export class File extends CoreFile<File, Directory> {
     data: FileWriteAsStringData,
     options?: FileWriteAsStringOptions,
   ): Promise<void> {
-    await FileWriter.writeInternal(
-      this.capPath,
-      'string',
-      data,
-      options?.append ?? false,
-    );
+    await this.prepareBeforeWrite(options);
+    await FileWriter.writeInternal(this.capPath, 'string', data, {
+      append: options?.append ?? false,
+    });
   }
 
   private async readInternal(format: 'base64' | 'string'): Promise<string> {
@@ -149,10 +147,23 @@ export class File extends CoreFile<File, Directory> {
     block: FileUseWriterBlock,
     options?: FileUseWriterOptions,
   ): Promise<void> {
+    await this.prepareBeforeWrite(options);
     if (options?.append !== true) {
       await this.writeAsString('');
     }
     const writer = new FileWriter(this.capPath);
     await block(writer);
+  }
+
+  private async prepareBeforeWrite(options?: FileWriteOptions) {
+    if (options?.createDirectoryRecursive) {
+      if (!(await this.parent_.exists())) {
+        await this.parent_.create();
+      }
+    }
+  }
+
+  override parent(): Directory {
+    return this.parent_;
   }
 }
