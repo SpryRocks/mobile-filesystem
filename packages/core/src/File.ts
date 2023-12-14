@@ -1,37 +1,47 @@
+import {Directory} from './Directory';
 import {Entry} from './Entry';
-import {FileWriter} from './FileWriter';
 
 export type FileMetadata = {
   modificationTime: Date;
   size: number;
 };
 
-type FileWriteBase = {
-  append?: boolean;
-  replace?: boolean;
-};
-
-export type FileWriteBlobOptions = FileWriteBase;
-export type FileWriteStringOptions = FileWriteBase;
-
-export type UseFileWriterBlock = (writer: FileWriter) => Promise<void>;
-export type UseFileWriterOptions = {
+export type FileWriteOptions = {
   append?: boolean;
 };
 
-export abstract class File extends Entry {
-  abstract get name(): string;
-  abstract delete(): Promise<void>;
-  abstract copyTo(destination: File): Promise<void>;
+export type FileReadBytesResult = Uint8Array;
+
+export type FileWriteBytesData = Uint8Array;
+export type FileWriteStringOptions = FileWriteOptions;
+
+export type FileReadAsStringResult = string;
+
+export type FileWriteAsStringData = string;
+export type FileWriteAsStringOptions = FileWriteOptions;
+
+export type FileWriteAsStringResult = void;
+
+export abstract class File<
+  TFile extends File<TFile, TDirectory>,
+  TDirectory extends Directory<TFile, TDirectory>,
+> extends Entry {
   abstract getMetadata(): Promise<FileMetadata>;
-  abstract get path(): string;
   abstract create(): Promise<void>;
-  abstract writeString(data: string, options?: FileWriteStringOptions): Promise<void>;
-  abstract writeBlob(data: Blob, options?: FileWriteBlobOptions): Promise<void>;
-  abstract readAsString(): Promise<string>;
-  abstract readAsDataUrl(): Promise<string>;
-  abstract useFileWriter(
-    block: UseFileWriterBlock,
-    options?: UseFileWriterOptions,
+  abstract delete(): Promise<void>;
+  abstract copyTo(destination: TFile): Promise<void>;
+
+  abstract readBytes(): Promise<FileReadBytesResult>;
+  abstract writeBytes(
+    data: FileWriteBytesData,
+    options?: FileWriteStringOptions,
   ): Promise<void>;
+
+  abstract readAsString(): Promise<FileReadAsStringResult>;
+  abstract writeAsString(
+    data: FileWriteAsStringData,
+    options?: FileWriteAsStringOptions,
+  ): Promise<FileWriteAsStringResult>;
+
+  abstract get name(): string;
 }
