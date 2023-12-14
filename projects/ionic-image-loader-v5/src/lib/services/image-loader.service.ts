@@ -408,13 +408,13 @@ export class ImageLoaderService {
       const fileName = this.createFileName(currentItem.imageUrl);
 
       try {
-        const data: Blob = await this.http.get(currentItem.imageUrl, {
-          responseType: 'blob',
+        const data = await this.http.get(currentItem.imageUrl, {
+          responseType: 'arraybuffer',
           headers: this.config.httpHeaders,
         }).toPromise();
 
         const file = await localDir.getFile(fileName);
-        await file.writeBlob(data, {replace: true});
+        await file.writeBytes(new Uint8Array(data));
 
         if (this.isCacheSpaceExceeded) {
           this.maintainCacheSize();
@@ -594,8 +594,8 @@ export class ImageLoaderService {
         // read the file as data url and return the base64 string.
         // should always be successful as the existence of the file
         // is already ensured
-        const base64: string = await fileEntry.readAsDataUrl();
-        return base64.replace('data:null', 'data:*/*');
+        const base64 = await fileEntry.readBase64();
+        return `data:*/*;base64,${base64}`;
       } else if (this.config.imageReturnType !== 'uri') {
         return "";
       }
@@ -609,7 +609,7 @@ export class ImageLoaderService {
 
       if (!this.isWKWebView) {
         // return native path
-        return fileEntry.path;
+        return await fileEntry.getUri();
       }
 
       // check if file already exists in temp directory
@@ -648,16 +648,16 @@ export class ImageLoaderService {
    * @returns the normalized Url
    */
 
-  private normalizeUrl(fileEntry: File): string {
+  private async normalizeUrl(fileEntry: File): Promise<string> {
     // Use Ionic normalizeUrl to generate the right URL for Ionic WKWebView
     if (Ionic && typeof Ionic.normalizeURL === 'function') {
-      return Ionic.normalizeURL(fileEntry.path);
+      return Ionic.normalizeURL(await fileEntry.getUri());
     }
     // use new webview function to do the trick
     if (this.webview) {
-      return this.webview.convertFileSrc(fileEntry.path);
+      return this.webview.convertFileSrc(await fileEntry.getUri());
     }
-    return fileEntry.path;
+    return await fileEntry.getUri();
   }
 
   /**

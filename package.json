@@ -10,7 +10,7 @@
   },
   "private": true,
   "dependencies": {
-    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.35"
+    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.41"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.6",
@@ -28,7 +28,7 @@
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1",
-    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.35",
+    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.41",
     "ng-packagr": "^17.0.0",
     "typescript": "5.2.2"
   }
