@@ -1,29 +1,23 @@
 /* eslint-disable no-console */
-import {base64ToByteArray, byteArrayToBase64} from './Utils';
 import {
-  AppendFileOptions as CapAppendFileOptions,
   Encoding as CapEncoding,
   Filesystem as CapFileSystem,
-  WriteFileOptions as CapWriteFileOptions,
 } from '@capacitor/filesystem';
 import {
   File as CoreFile,
   FileMetadata,
   FileReadAsStringResult,
   FileReadBase64Result,
-  FileReadBytesResult,
+  FileUseWriterBlock,
+  FileUseWriterOptions,
   FileWriteAsStringData,
   FileWriteAsStringOptions,
-  FileWriteAsStringResult,
   FileWriteBase64Data,
   FileWriteBase64Options,
-  FileWriteBase64Result,
-  FileWriteBytesData,
-  FileWriteBytesOptions,
-  FileWriteBytesResult,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 import {CapPath} from './CapPath';
 import {Directory} from './Directory';
+import {FileWriter} from './FileWriter';
 
 export class File extends CoreFile<File, Directory> {
   constructor(private readonly capPath: CapPath) {
@@ -81,19 +75,6 @@ export class File extends CoreFile<File, Directory> {
     });
   }
 
-  override async readBytes(): Promise<FileReadBytesResult> {
-    const base64String = await this.readInternal('base64');
-    return base64ToByteArray(base64String);
-  }
-
-  override async writeBytes(
-    data: FileWriteBytesData,
-    options?: FileWriteBytesOptions,
-  ): Promise<FileWriteBytesResult> {
-    const base64String = byteArrayToBase64(data);
-    await this.writeInternal('base64', base64String, options?.append ?? false);
-  }
-
   override readBase64(): Promise<FileReadBase64Result> {
     return this.readInternal('base64');
   }
@@ -101,8 +82,13 @@ export class File extends CoreFile<File, Directory> {
   override async writeBase64(
     data: FileWriteBase64Data,
     options?: FileWriteBase64Options,
-  ): Promise<FileWriteBase64Result> {
-    await this.writeInternal('base64', data, options?.append ?? false);
+  ): Promise<void> {
+    await FileWriter.writeInternal(
+      this.capPath,
+      'base64',
+      data,
+      options?.append ?? false,
+    );
   }
 
   override readAsString(): Promise<FileReadAsStringResult> {
@@ -112,30 +98,22 @@ export class File extends CoreFile<File, Directory> {
   override async writeAsString(
     data: FileWriteAsStringData,
     options?: FileWriteAsStringOptions,
-  ): Promise<FileWriteAsStringResult> {
-    await this.writeInternal('string', data, options?.append ?? false);
-  }
-
-  private readInternal(format: 'base64' | 'string'): Promise<string> {
-    return CapFileSystem.readFile({
-      directory: this.capPath.directory,
-      path: this.capPath.path,
-      encoding: format === 'base64' ? undefined : CapEncoding.UTF8,
-    }).then((result) => result.data as string);
-  }
-
-  private writeInternal(format: 'base64' | 'string', data: string, append: boolean) {
-    const options: CapAppendFileOptions & CapWriteFileOptions = {
-      directory: this.capPath.directory,
-      path: this.capPath.path,
-      encoding: format === 'base64' ? undefined : CapEncoding.UTF8,
+  ): Promise<void> {
+    await FileWriter.writeInternal(
+      this.capPath,
+      'string',
       data,
-    };
-    if (append) {
-      return CapFileSystem.appendFile(options);
-    } else {
-      return CapFileSystem.writeFile(options);
-    }
+      options?.append ?? false,
+    );
+  }
+
+  private async readInternal(format: 'base64' | 'string'): Promise<string> {
+    let result = await CapFileSystem.readFile({
+      directory: this.capPath.directory,
+      path: this.capPath.path,
+      encoding: format === 'base64' ? undefined : CapEncoding.UTF8,
+    });
+    return result.data as string;
   }
 
   override get name(): string {
@@ -148,5 +126,16 @@ export class File extends CoreFile<File, Directory> {
       path: this.capPath.path,
     });
     return result.uri;
+  }
+
+  override async useWriter(
+    block: FileUseWriterBlock,
+    options?: FileUseWriterOptions,
+  ): Promise<void> {
+    if (options?.append !== true) {
+      await this.writeAsString('');
+    }
+    const writer = new FileWriter(this.capPath);
+    await block(writer);
   }
 }

@@ -1,5 +1,6 @@
 import {Directory} from './Directory';
 import {Entry} from './Entry';
+import {FileWriter} from './FileWriter';
 
 export type FileMetadata = {
   modificationTime: Date;
@@ -10,20 +11,16 @@ export type FileWriteOptions = {
   append?: boolean;
 };
 
-export type FileReadBytesResult = Uint8Array;
-export type FileWriteBytesData = Uint8Array;
-export type FileWriteBytesOptions = FileWriteOptions;
-export type FileWriteBytesResult = void;
-
 export type FileReadBase64Result = string;
 export type FileWriteBase64Data = string;
 export type FileWriteBase64Options = FileWriteOptions;
-export type FileWriteBase64Result = void;
 
 export type FileReadAsStringResult = string;
 export type FileWriteAsStringData = string;
 export type FileWriteAsStringOptions = FileWriteOptions;
-export type FileWriteAsStringResult = void;
+
+export type FileUseWriterBlock = (writer: FileWriter) => Promise<void>;
+export type FileUseWriterOptions = FileWriteOptions;
 
 export abstract class File<
   TFile extends File<TFile, TDirectory>,
@@ -34,23 +31,22 @@ export abstract class File<
   abstract delete(): Promise<void>;
   abstract copyTo(destination: TFile): Promise<void>;
 
-  abstract readBytes(): Promise<FileReadBytesResult>;
-  abstract writeBytes(
-    data: FileWriteBytesData,
-    options?: FileWriteBytesOptions,
-  ): Promise<FileWriteBytesResult>;
-
   abstract readBase64(): Promise<FileReadBase64Result>;
   abstract writeBase64(
     data: FileWriteBase64Data,
     options?: FileWriteBase64Options,
-  ): Promise<FileWriteBase64Result>;
+  ): Promise<void>;
 
   abstract readAsString(): Promise<FileReadAsStringResult>;
   abstract writeAsString(
     data: FileWriteAsStringData,
     options?: FileWriteAsStringOptions,
-  ): Promise<FileWriteAsStringResult>;
+  ): Promise<void>;
+
+  abstract useWriter(
+    block: FileUseWriterBlock,
+    options?: FileUseWriterOptions,
+  ): Promise<void>;
 
   abstract get name(): string;
 
