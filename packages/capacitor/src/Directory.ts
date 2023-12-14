@@ -49,7 +49,9 @@ export class Directory extends CoreDirectory<File, Directory> {
   ): Promise<Directory> {
     const directory = new Directory(this.capPath.subPath(path));
     if (options?.create) {
-      await directory.create();
+      if (!(await this.exists())) {
+        await directory.create();
+      }
     }
     return directory;
   }
