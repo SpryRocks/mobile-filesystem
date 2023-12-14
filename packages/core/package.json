@@ -1,6 +1,6 @@
 {
   "name": "@spryrocks/mobile-filesystem-plugin-core",
-  "version": "0.0.2-alpha.39",
+  "version": "0.0.2-alpha.40",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
