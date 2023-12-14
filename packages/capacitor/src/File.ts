@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import {base64ToByteArray, byteArrayToBase64} from './Utils';
 import {
   Encoding as CapEncoding,
   Filesystem as CapFileSystem,
@@ -8,12 +9,15 @@ import {
   FileMetadata,
   FileReadAsStringResult,
   FileReadBase64Result,
+  FileReadBytesResult,
   FileUseWriterBlock,
   FileUseWriterOptions,
   FileWriteAsStringData,
   FileWriteAsStringOptions,
   FileWriteBase64Data,
   FileWriteBase64Options,
+  FileWriteBytesData,
+  FileWriteBytesOptions,
 } from '@spryrocks/mobile-filesystem-plugin-core';
 import {CapPath} from './CapPath';
 import {Directory} from './Directory';
@@ -73,6 +77,24 @@ export class File extends CoreFile<File, Directory> {
       toDirectory: destination.capPath.directory,
       to: destination.capPath.path,
     });
+  }
+
+  override async readBytes(): Promise<FileReadBytesResult> {
+    const base64String = await this.readInternal('base64');
+    return base64ToByteArray(base64String);
+  }
+
+  override async writeBytes(
+    data: FileWriteBytesData,
+    options?: FileWriteBytesOptions,
+  ): Promise<void> {
+    const base64String = byteArrayToBase64(data);
+    await FileWriter.writeInternal(
+      this.capPath,
+      'base64',
+      base64String,
+      options?.append ?? false,
+    );
   }
 
   override readBase64(): Promise<FileReadBase64Result> {

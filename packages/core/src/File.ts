@@ -11,6 +11,10 @@ export type FileWriteOptions = {
   append?: boolean;
 };
 
+export type FileReadBytesResult = Uint8Array;
+export type FileWriteBytesData = Uint8Array;
+export type FileWriteBytesOptions = FileWriteOptions;
+
 export type FileReadBase64Result = string;
 export type FileWriteBase64Data = string;
 export type FileWriteBase64Options = FileWriteOptions;
@@ -30,6 +34,12 @@ export abstract class File<
   abstract create(): Promise<void>;
   abstract delete(): Promise<void>;
   abstract copyTo(destination: TFile): Promise<void>;
+
+  abstract readBytes(): Promise<FileReadBytesResult>;
+  abstract writeBytes(
+    data: FileWriteBytesData,
+    options?: FileWriteBytesOptions,
+  ): Promise<void>;
 
   abstract readBase64(): Promise<FileReadBase64Result>;
   abstract writeBase64(
