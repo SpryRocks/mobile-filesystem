@@ -8,6 +8,15 @@ import {Filesystem as CapFileSystem} from './Plugin';
 import {CapPath} from './CapPath';
 import {File} from './File';
 
+type InternalEntry = {
+  name: string;
+  type: 'directory' | 'file';
+};
+
+type GetEntriesInternalResult = {
+  entries: InternalEntry[];
+};
+
 export class Directory extends CoreDirectory<CapPath, File, Directory> {
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(nativePath: CapPath) {
@@ -35,7 +44,7 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
   }
 
   override async getEntries() {
-    const {files: entries} = await this.getEntriesInternal();
+    const {entries} = await this.getEntriesInternal();
     const capPath = this.nativePath;
     const files: File[] = [];
     const directories: Directory[] = [];
@@ -53,16 +62,12 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
     return {files, directories};
   }
 
-  private async getEntriesInternal(): Promise<{
-    files: {
-      name: string;
-      type: 'directory' | 'file';
-    }[];
-  }> {
-    return CapFileSystem.readdir({
+  private async getEntriesInternal(): Promise<GetEntriesInternalResult> {
+    const {files} = await CapFileSystem.readdir({
       directory: this.nativePath.directory,
       path: this.nativePath.path,
     });
+    return {entries: files};
   }
 
   override async create(options?: DirectoryCreateOptions) {
