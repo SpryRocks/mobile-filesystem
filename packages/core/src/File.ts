@@ -1,67 +1,111 @@
+import {base64ToByteArray, byteArrayToBase64} from './Utils';
+import {
+  FileMetadata,
+  FileUseWriterBlock,
+  FileUseWriterOptions,
+  FileWriteAsStringData,
+  FileWriteAsStringOptions,
+  FileWriteBase64Data,
+  FileWriteBase64Options,
+  FileWriteBytesData,
+  FileWriteBytesOptions,
+  FileWriteOptions,
+  IFile,
+} from './IFile';
 import {Directory} from './Directory';
 import {Entry} from './Entry';
 import {FileWriter} from './FileWriter';
-
-export type FileMetadata = {
-  modificationTime: Date;
-  size: number;
-};
-
-export type FileWriteOptions = {
-  append?: boolean;
-  createDirectoryRecursive?: boolean;
-};
-
-export type FileReadBytesResult = Uint8Array;
-export type FileWriteBytesData = Uint8Array;
-export type FileWriteBytesOptions = FileWriteOptions;
-
-export type FileReadBase64Result = string;
-export type FileWriteBase64Data = string;
-export type FileWriteBase64Options = FileWriteOptions;
-
-export type FileReadAsStringResult = string;
-export type FileWriteAsStringData = string;
-export type FileWriteAsStringOptions = FileWriteOptions;
-
-export type FileUseWriterBlock = (writer: FileWriter) => Promise<void>;
-export type FileUseWriterOptions = FileWriteOptions;
+import {IFileWriterDelegate} from './IFileWriter';
+import {NativePath} from './NativePath';
 
 export abstract class File<
-  TFile extends File<TFile, TDirectory>,
-  TDirectory extends Directory<TFile, TDirectory>,
-> extends Entry {
+    TPath extends NativePath<TPath>,
+    TFile extends File<TPath, TFile, TDirectory>,
+    TDirectory extends Directory<TPath, TFile, TDirectory>,
+  >
+  extends Entry
+  implements IFile<TPath, TFile, TDirectory>, IFileWriterDelegate
+{
+  protected constructor(
+    protected readonly nativePath: TPath,
+    protected readonly parent_: TDirectory,
+  ) {
+    super();
+  }
+
   abstract getMetadata(): Promise<FileMetadata>;
-  abstract create(): Promise<void>;
   abstract delete(): Promise<void>;
   abstract copyTo(destination: TFile): Promise<void>;
 
-  abstract readBytes(): Promise<FileReadBytesResult>;
-  abstract writeBytes(
-    data: FileWriteBytesData,
-    options?: FileWriteBytesOptions,
+  async readBytes() {
+    const base64String = await this.readInternal('base64');
+    return base64ToByteArray(base64String);
+  }
+
+  async writeBytes(data: FileWriteBytesData, options?: FileWriteBytesOptions) {
+    await this.prepareBeforeWrite(options);
+    const base64String = byteArrayToBase64(data);
+    await this.writeInternal('base64', base64String, {
+      append: options?.append ?? false,
+    });
+  }
+
+  readBase64() {
+    return this.readInternal('base64');
+  }
+
+  async writeBase64(data: FileWriteBase64Data, options?: FileWriteBase64Options) {
+    await this.prepareBeforeWrite(options);
+    await this.writeInternal('base64', data, {
+      append: options?.append ?? false,
+    });
+  }
+
+  readAsString() {
+    return this.readInternal('string');
+  }
+
+  async writeAsString(data: FileWriteAsStringData, options?: FileWriteAsStringOptions) {
+    await this.prepareBeforeWrite(options);
+    await this.writeInternal('string', data, {
+      append: options?.append ?? false,
+    });
+  }
+
+  async useFileWriter(block: FileUseWriterBlock, options?: FileUseWriterOptions) {
+    await this.prepareBeforeWrite(options);
+    if (options?.append !== true) {
+      await this.writeAsString('');
+    }
+    const writer = new FileWriter(this);
+    await block(writer);
+  }
+
+  abstract readInternal(format: 'base64' | 'string'): Promise<string>;
+
+  abstract writeInternal(
+    format: 'base64' | 'string',
+    data: string,
+    options: {
+      append: boolean;
+    },
   ): Promise<void>;
 
-  abstract readBase64(): Promise<FileReadBase64Result>;
-  abstract writeBase64(
-    data: FileWriteBase64Data,
-    options?: FileWriteBase64Options,
-  ): Promise<void>;
+  protected async prepareBeforeWrite(options?: FileWriteOptions) {
+    if (options?.createDirectoryRecursive) {
+      if (!(await this.parent_.exists())) {
+        await this.parent_.create();
+      }
+    }
+  }
 
-  abstract readAsString(): Promise<FileReadAsStringResult>;
-  abstract writeAsString(
-    data: FileWriteAsStringData,
-    options?: FileWriteAsStringOptions,
-  ): Promise<void>;
-
-  abstract useFileWriter(
-    block: FileUseWriterBlock,
-    options?: FileUseWriterOptions,
-  ): Promise<void>;
-
-  abstract get name(): string;
+  get name() {
+    return this.nativePath.getName();
+  }
 
   abstract getUri(): Promise<string>;
 
-  abstract parent(): TDirectory;
+  parent() {
+    return this.parent_;
+  }
 }

@@ -1,54 +1,55 @@
+import {
+  DirectoryCreateOptions,
+  DirectoryDeleteOptions,
+  DirectoryGetDirectoryOptions,
+  DirectoryGetEntriesResult,
+  IDirectory,
+} from './IDirectory';
 import {Entry} from './Entry';
 import {File} from './File';
-
-export type DirectoryGetFileOptions = {
-  create?: boolean;
-};
-export type DirectoryGetFileResult<
-  TFile extends File<TFile, TDirectory>,
-  TDirectory extends Directory<TFile, TDirectory>,
-> = TFile;
-export type DirectoryGetDirectoryOptions = {
-  create?: boolean;
-};
-export type DirectoryGetDirectoryResult<
-  TFile extends File<TFile, TDirectory>,
-  TDirectory extends Directory<TFile, TDirectory>,
-> = TDirectory;
-export type DirectoryDeleteOptions = {
-  recursively?: boolean;
-};
-export type DirectoryGetEntriesResult<
-  TFile extends File<TFile, TDirectory>,
-  TDirectory extends Directory<TFile, TDirectory>,
-> = Entry[];
-export type DirectoryGetFilesResult<
-  TFile extends File<TFile, TDirectory>,
-  TDirectory extends Directory<TFile, TDirectory>,
-> = TFile[];
-export type DirectoryGetDirectoriesResult<
-  TFile extends File<TFile, TDirectory>,
-  TDirectory extends Directory<TFile, TDirectory>,
-> = TDirectory[];
-export type DirectoryCreateOptions = {
-  replace?: boolean;
-};
+import {NativePath} from './NativePath';
 
 export abstract class Directory<
-  TFile extends File<TFile, TDirectory>,
-  TDirectory extends Directory<TFile, TDirectory>,
-> extends Entry {
-  abstract getFile(
-    path: string,
-    options?: DirectoryGetFileOptions,
-  ): Promise<DirectoryGetFileResult<TFile, TDirectory>>;
-  abstract getDirectory(
-    path: string,
-    options?: DirectoryGetDirectoryOptions,
-  ): Promise<DirectoryGetDirectoryResult<TFile, TDirectory>>;
-  abstract getEntries(): Promise<DirectoryGetEntriesResult<TFile, TDirectory>>;
-  abstract getFiles(): Promise<DirectoryGetFilesResult<TFile, TDirectory>>;
-  abstract getDirectories(): Promise<DirectoryGetDirectoriesResult<TFile, TDirectory>>;
+    TPath extends NativePath<TPath>,
+    TFile extends File<TPath, TFile, TDirectory>,
+    TDirectory extends Directory<TPath, TFile, TDirectory>,
+  >
+  extends Entry
+  implements IDirectory<TPath, TFile, TDirectory>
+{
+  protected constructor(protected readonly nativePath: TPath) {
+    super();
+  }
+
+  protected abstract createFile(path: TPath): TFile;
+  protected abstract createDirectory(path: TPath): TDirectory;
+
+  async getFile(path: string) {
+    return this.createFile(this.nativePath.subPath(path));
+  }
+
+  async getDirectory(path: string, options?: DirectoryGetDirectoryOptions) {
+    const directory = this.createDirectory(this.nativePath.subPath(path));
+    if (options?.create) {
+      if (!(await directory.exists())) {
+        await directory.create();
+      }
+    }
+    return directory;
+  }
+
+  abstract getEntries(): Promise<DirectoryGetEntriesResult<TPath, TFile, TDirectory>>;
+
+  async getFiles() {
+    const entries = await this.getEntries();
+    return entries.files;
+  }
+
+  async getDirectories() {
+    const entries = await this.getEntries();
+    return entries.directories;
+  }
+
   abstract create(options?: DirectoryCreateOptions): Promise<void>;
   abstract delete(options?: DirectoryDeleteOptions): Promise<void>;
 }

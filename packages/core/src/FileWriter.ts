@@ -1,15 +1,21 @@
-export type FileWriterWriteBase64Data = string;
-export type FileWriterWriteBase64Result = void;
+import {
+  FileWriterWriteBase64Data,
+  FileWriterWriteStringData,
+  IFileWriterDelegate,
+} from './IFileWriter';
 
-export type FileWriterWriteAsStringData = string;
-export type FileWriterWriteAsStringResult = void;
+export class FileWriter {
+  constructor(private readonly delegate: IFileWriterDelegate) {}
 
-export abstract class FileWriter {
-  abstract writeBase64(
-    data: FileWriterWriteBase64Data,
-  ): Promise<FileWriterWriteBase64Result>;
+  async writeBase64(data: FileWriterWriteBase64Data) {
+    await this.delegate.writeInternal('base64', data, {
+      append: true,
+    });
+  }
 
-  abstract writeString(
-    data: FileWriterWriteAsStringData,
-  ): Promise<FileWriterWriteAsStringResult>;
+  async writeString(data: FileWriterWriteStringData) {
+    await this.delegate.writeInternal('string', data, {
+      append: true,
+    });
+  }
 }

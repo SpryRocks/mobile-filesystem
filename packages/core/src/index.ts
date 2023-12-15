@@ -4,3 +4,7 @@ export * from './Directory';
 export {SystemDirectoryType} from './SystemDirectoryType';
 export * from './Entry';
 export * from './FileWriter';
+export * from './NativePath';
+export * from './IDirectory';
+export * from './IFile';
+export * from './Utils';

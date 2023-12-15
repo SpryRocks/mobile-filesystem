@@ -1,29 +1,21 @@
 import {Directory as CapDirectory} from '@capacitor/filesystem';
+import {NativePath} from '@spryrocks/mobile-filesystem-plugin-core';
 
-export class CapPath {
-  public static forDirectory(directory: CapDirectory, path: string | undefined): CapPath {
-    return new CapPath(directory, path ?? '');
-  }
-
+export class CapPath extends NativePath<CapPath> {
   constructor(
     public readonly directory: CapDirectory,
-    public readonly path: string,
-  ) {}
+    path: string,
+  ) {
+    super(path);
+  }
 
-  subPath(path: string) {
+  override subPath(path: string) {
     return new CapPath(this.directory, this.combinePath(path));
   }
 
-  getName() {
-    const parts = this.path.split('/');
-    if (parts.length < 1) {
-      return this.directory;
-    }
-
-    return parts[parts.length - 1];
-  }
-
-  private combinePath(path: string) {
-    return this.path + '/' + path;
+  override getName() {
+    const name = super.getName();
+    if (name.length < 1) return this.directory.toString();
+    return name;
   }
 }
