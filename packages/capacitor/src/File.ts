@@ -16,10 +16,7 @@ export class File extends CoreFile<CapPath, File, Directory> {
 
   override async exists() {
     try {
-      const result = await CapFileSystem.stat({
-        directory: this.nativePath.directory,
-        path: this.nativePath.path,
-      });
+      const result = await CapFileSystem.stat(this.nativePath);
       return result.type === 'file';
     } catch (e) {
       return false;
@@ -27,10 +24,7 @@ export class File extends CoreFile<CapPath, File, Directory> {
   }
 
   override async getMetadata() {
-    const stat = await CapFileSystem.stat({
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
-    });
+    const stat = await CapFileSystem.stat(this.nativePath);
     return {
       size: stat.size,
       modificationTime: new Date(stat.mtime),
@@ -38,10 +32,7 @@ export class File extends CoreFile<CapPath, File, Directory> {
   }
 
   override async delete() {
-    await CapFileSystem.deleteFile({
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
-    });
+    await CapFileSystem.deleteFile(this.nativePath);
   }
 
   override async copyTo(destination: File) {
@@ -54,18 +45,14 @@ export class File extends CoreFile<CapPath, File, Directory> {
   }
 
   override async getUri() {
-    const result = await CapFileSystem.getUri({
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
-    });
+    const result = await CapFileSystem.getUri(this.nativePath);
     return result.uri;
   }
 
   override async readInternal(format: 'base64' | 'string') {
     const encoding = format === 'base64' ? undefined : CapEncoding.UTF8;
     let result = await CapFileSystem.readFile({
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
+      ...this.nativePath,
       encoding,
     });
     return result.data as string;
@@ -78,8 +65,7 @@ export class File extends CoreFile<CapPath, File, Directory> {
   ) {
     const encoding = format === 'base64' ? undefined : CapEncoding.UTF8;
     const capOptions: CapAppendFileOptions & CapWriteFileOptions = {
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
+      ...this.nativePath,
       encoding,
       data,
     };
