@@ -1,8 +1,10 @@
 import {
   //
+  AppendFileOptions,
   Directory,
   Encoding,
   Filesystem,
+  WriteFileOptions,
 } from '@capacitor/filesystem';
 
 export {
@@ -10,4 +12,6 @@ export {
   Filesystem,
   Directory,
   Encoding,
+  AppendFileOptions,
+  WriteFileOptions,
 };
