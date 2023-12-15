@@ -11,7 +11,8 @@
       "ES2015",
       "DOM"
     ],
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": "./"
   },
   "exclude": [
     "src/test.ts",
