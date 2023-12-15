@@ -68,6 +68,13 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
       path: this.nativePath.path,
     });
     const entries: InternalEntry[] = [];
+    for (const name of files) {
+      const {type} = await CapFileSystem.stat(this.nativePath.subPath(name));
+      if (type !== 'file' && type !== 'directory') {
+        throw new Error(`Unsupported entry type: ${type}`);
+      }
+      entries.push({name, type});
+    }
     return {entries};
   }
 
