@@ -9,27 +9,20 @@
     "test": "ng test"
   },
   "private": true,
-  "dependencies": {
-    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.44"
+  "peerDependencies": {
+    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.49"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.0.6",
     "@angular/cli": "^17.0.6",
-    "@angular/common": "^17.0.6",
-    "@angular/compiler": "^17.0.6",
-    "@angular/compiler-cli": "^17.0.6",
-    "@angular/core": "^17.0.6",
-    "@angular/forms": "^17.0.6",
-    "@angular/platform-browser": "^17.0.6",
-    "@angular/platform-browser-dynamic": "^17.0.6",
+    "@angular/compiler-cli": "^17.0.7",
+    "@angular/compiler": "^17.0.7",
+    "@angular/common": "^17.0.7",
+    "@angular/core": "^17.0.7",
+    "@angular-devkit/build-angular": "^17.0.6",
+    "ng-packagr": "^17.0.2",
+    "typescript": "5.2.2",
     "@ionic-native/ionic-webview": "^5.36.0",
-    "@ionic/angular": "^7.6.0",
-    "codelyzer": "^5.0.0",
-    "rxjs": "~6.5.1",
-    "tslib": "^1.9.0",
-    "zone.js": "~0.9.1",
-    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.44",
-    "ng-packagr": "^17.0.0",
-    "typescript": "5.2.2"
+    "@ionic/angular": "^7.6.1",
+    "@spryrocks/capacitor-filesystem-plugin": "^0.0.2-alpha.49"
   }
 }

@@ -94,7 +94,7 @@ export class ImageLoaderService {
   }
 
   get nativeAvailable(): boolean {
-    return FileSystemPlugin.isAvailable();
+    return true;
   }
 
   private get isCacheSpaceExceeded(): boolean {
@@ -203,13 +203,17 @@ export class ImageLoaderService {
     this.runLocked(async () => {
       try {
         let directory = await this.getFileCacheDirectory().getDirectory(this.config.cacheDirectoryName)
-        await directory.delete({recursively: true});
+        await directory.delete({
+          // recursively: true
+        });
 
         if (this.isWKWebView && !this.isIonicWKWebView) {
           // also clear the temp files
           try {
             directory = await FileSystemPlugin.getSystemDirectory(SystemDirectoryType.Temp).getDirectory(this.config.cacheDirectoryName);
-            await directory.delete({recursively: true});
+            await directory.delete({
+              // recursively: true,
+            });
           } catch (err) {
             // Noop catch. Removing the tempDirectory might fail,
             // as it is not persistent.
