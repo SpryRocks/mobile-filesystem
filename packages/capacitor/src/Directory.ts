@@ -33,10 +33,7 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
 
   override async exists() {
     try {
-      const result = await CapFileSystem.stat({
-        directory: this.nativePath.directory,
-        path: this.nativePath.path,
-      });
+      const result = await CapFileSystem.stat(this.nativePath);
       return result.type === 'directory';
     } catch (e) {
       return false;
@@ -51,10 +48,11 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
     entries.forEach((fi) => {
       const name = fi.name;
       const type = fi.type;
+      const path = capPath.subPath(name);
       if (type === 'file') {
-        files.push(this.createFile(capPath.subPath(name)));
+        files.push(this.createFile(path));
       } else if (type === 'directory') {
-        directories.push(this.createDirectory(capPath.subPath(name)));
+        directories.push(this.createDirectory(path));
       } else {
         throw new Error(`Not supported ${type}`);
       }
@@ -63,10 +61,7 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
   }
 
   private async getEntriesInternal(): Promise<GetEntriesInternalResult> {
-    const {files} = await CapFileSystem.readdir({
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
-    });
+    const {files} = await CapFileSystem.readdir(this.nativePath);
     const entries: InternalEntry[] = [];
     for (const name of files) {
       const {type} = await CapFileSystem.stat(this.nativePath.subPath(name));
@@ -83,8 +78,7 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
       await this.delete({onlyIfExists: true});
     }
     await CapFileSystem.mkdir({
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
+      ...this.nativePath,
       // recursive: true,
     });
   }
@@ -94,8 +88,7 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
       if (!(await this.exists())) return;
     }
     await CapFileSystem.rmdir({
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
+      ...this.nativePath,
       // recursive: true,
     });
   }
