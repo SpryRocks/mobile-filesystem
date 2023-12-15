@@ -1,4 +1,4 @@
-import {Directory as CapDirectory} from '@capacitor/filesystem';
+import {Directory as CapDirectory} from './Plugin';
 import {SystemDirectoryType} from '@spryrocks/mobile-filesystem-plugin-core';
 
 export const mapSystemDirectoryToCap = (type: SystemDirectoryType): CapDirectory => {

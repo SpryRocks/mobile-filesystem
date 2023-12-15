@@ -4,7 +4,7 @@ import {
   DirectoryCreateOptions,
   DirectoryDeleteOptions,
 } from '@spryrocks/mobile-filesystem-plugin-core';
-import {Filesystem as CapFileSystem} from '@capacitor/filesystem';
+import {Filesystem as CapFileSystem} from './Plugin';
 import {CapPath} from './CapPath';
 import {File} from './File';
 

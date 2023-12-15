@@ -1,4 +1,4 @@
-import {Directory as CapDirectory} from '@capacitor/filesystem';
+import {Directory as CapDirectory} from './Plugin';
 import {NativePath} from '@spryrocks/mobile-filesystem-plugin-core';
 
 export class CapPath extends NativePath<CapPath> {
