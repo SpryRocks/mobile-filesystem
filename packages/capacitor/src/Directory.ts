@@ -59,10 +59,15 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
       type: 'directory' | 'file';
     }[];
   }> {
-    return CapFileSystem.readdir({
+    const {files} = await CapFileSystem.readdir({
       directory: this.nativePath.directory,
       path: this.nativePath.path,
     });
+    const entries: {
+      name: string;
+      type: 'directory' | 'file';
+    }[] = [];
+    return {files: entries};
   }
 
   override async create(options?: DirectoryCreateOptions) {
