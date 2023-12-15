@@ -1,6 +1,6 @@
 {
   "name": "@spryrocks/react-native-filesystem-plugin",
-  "version": "5.0.0-alpha.1",
+  "version": "5.0.0-alpha.3",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -19,7 +19,7 @@
     "compile": "tsc --noEmit"
   },
   "dependencies": {
-    "@spryrocks/mobile-filesystem-plugin-core": "^5.0.0-alpha.1"
+    "@spryrocks/mobile-filesystem-plugin-core": "^5.0.0-alpha.3"
   },
   "peerDependencies": {
     "react-native-fs": "^2.20.0"
