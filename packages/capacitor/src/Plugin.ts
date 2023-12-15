@@ -1,13 +1,10 @@
-import {
-  //
-  Directory,
-  Encoding,
-  Filesystem,
-} from '@capacitor/filesystem';
+import {FilesystemDirectory, FilesystemEncoding, Plugins} from '@capacitor/core';
+
+const {Filesystem} = Plugins;
 
 export {
   //
   Filesystem,
-  Directory,
-  Encoding,
+  FilesystemDirectory as Directory,
+  FilesystemEncoding as Encoding,
 };

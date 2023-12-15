@@ -29,17 +29,12 @@
     chalk "^2.4.2"
     js-tokens "^4.0.0"
 
-"@capacitor/core@^5.5.1":
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-5.5.1.tgz#bd2a969a1149a480aed3483d8867677e85606058"
-  integrity sha512-VG6Iv8Q7ZAbvjodxpvjcSe0jfxUwZXnvjbi93ehuJ6eYP8U926qLSXyrT/DToZq+F6v/HyGyVgn3mrE/9jW2Tg==
+"@capacitor/core@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-2.5.0.tgz#86b202ed950846427f710fafbdbbd844b1d0cc56"
+  integrity sha512-WUkUnqqLtlEYn6tly8t6VR0ABlSVbXdlD/gBbYxx0P+gEqMF9b46uYb2YqyH+8HBDANzTweEySpLfhiSUvYS7w==
   dependencies:
-    tslib "^2.1.0"
-
-"@capacitor/filesystem@^5.1.4":
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/@capacitor/filesystem/-/filesystem-5.1.4.tgz#6e3278f4c47c72416d586367889736b576113ef5"
-  integrity sha512-10EM1KvFMs+pTzxkcflspzxBWcX9sOnS9nTP5Afjr5hn4OxLrwTFySw2Z12Uv6jdN4OnhY3jXtDKXPljXvXILg==
+    tslib "^1.9.0"
 
 "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0":
   version "4.4.0"
@@ -5013,6 +5008,11 @@ tsconfig-paths@^4.1.2:
     json5 "^2.2.2"
     minimist "^1.2.6"
     strip-bom "^3.0.0"
+
+tslib@^1.9.0:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+  integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
 tslib@^2.1.0, tslib@^2.3.0, tslib@^2.4.0, tslib@^2.6.0, tslib@^2.6.2:
   version "2.6.2"
