@@ -35,10 +35,7 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
   }
 
   override async getEntries() {
-    const {files: entries} = await CapFileSystem.readdir({
-      directory: this.nativePath.directory,
-      path: this.nativePath.path,
-    });
+    const {files: entries} = await this.getEntriesInternal();
     const capPath = this.nativePath;
     const files: File[] = [];
     const directories: Directory[] = [];
@@ -56,6 +53,18 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
     return {files, directories};
   }
 
+  private async getEntriesInternal(): Promise<{
+    files: {
+      name: string;
+      type: 'directory' | 'file';
+    }[];
+  }> {
+    return CapFileSystem.readdir({
+      directory: this.nativePath.directory,
+      path: this.nativePath.path,
+    });
+  }
+
   override async create(options?: DirectoryCreateOptions) {
     if (options?.replace) {
       await this.delete({onlyIfExists: true});
@@ -71,7 +80,7 @@ export class Directory extends CoreDirectory<CapPath, File, Directory> {
     if (options?.onlyIfExists) {
       if (!(await this.exists())) return;
     }
-    return CapFileSystem.rmdir({
+    await CapFileSystem.rmdir({
       directory: this.nativePath.directory,
       path: this.nativePath.path,
       // recursive: true,

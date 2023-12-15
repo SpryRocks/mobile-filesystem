@@ -1,8 +1,9 @@
 import {
   AppendFileOptions as CapAppendFileOptions,
+  Encoding as CapEncoding,
+  Filesystem as CapFileSystem,
   WriteFileOptions as CapWriteFileOptions,
-} from '@capacitor/filesystem/dist/esm/definitions';
-import {Encoding as CapEncoding, Filesystem as CapFileSystem} from './Plugin';
+} from './Plugin';
 import {CapPath} from './CapPath';
 import {File as CoreFile} from '@spryrocks/mobile-filesystem-plugin-core';
 import {Directory} from './Directory';

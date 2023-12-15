@@ -1,4 +1,9 @@
-import {FilesystemDirectory, FilesystemEncoding, Plugins} from '@capacitor/core';
+import {
+    //
+    FilesystemDirectory,
+    FilesystemEncoding,
+    Plugins,
+} from '@capacitor/core';
 
 const {Filesystem} = Plugins;
 
