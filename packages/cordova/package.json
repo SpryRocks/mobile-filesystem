@@ -1,0 +1,37 @@
+{
+	"name": "@spryrocks/cordova-filesystem-plugin",
+	"version": "5.0.0-alpha.5",
+	"main": "dist/plugin.cjs.js",
+	"module": "dist/esm/index.js",
+	"types": "dist/esm/index.d.ts",
+	"unpkg": "dist/plugin.js",
+	"files": [
+		"dist/"
+	],
+	"author": "",
+	"description": "CapacitorFilesystemPlugin",
+	"license": "MIT",
+	"scripts": {
+		"lint": "eslint './**/*.{ts,tsx}' --cache --fix",
+		"build": "npm run clean && tsc && rollup -c rollup.config.mjs",
+		"clean": "rimraf ./dist",
+		"prepublishOnly": "npm run build",
+		"compile": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@spryrocks/mobile-filesystem-plugin-core": "^5.0.0-alpha.5"
+	},
+	"peerDependencies": {
+		"@ionic-native/file": "^5.36.0",
+		"cordova-plugin-file": "^8.0.0"
+	},
+	"devDependencies": {
+		"@ionic-native/file": "^5.36.0",
+		"cordova-plugin-file": "^8.0.0",
+		"@spryrocks/eslint-config": "^0.3.0-alpha.2",
+		"rollup": "^4.8.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

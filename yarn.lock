@@ -102,6 +102,13 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
+"@ionic-native/file@^5.36.0":
+  version "5.36.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/file/-/file-5.36.0.tgz#038c855be00680b03a9d9e802a1d60cb7de5ef28"
+  integrity sha512-x7yZ4VdC8n8FNlpRmUFtohNlOZnExvoxZ/6oCvGsV+ec8TJXUsDK/BYi1g+lkPTCUY3EmQIeBOe4PLO6fRJ7qg==
+  dependencies:
+    "@types/cordova" latest
+
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/@isaacs/cliui/-/cliui-8.0.2.tgz#b37667b7bc181c168782259bab42474fbf52b550"
@@ -628,6 +635,11 @@
   dependencies:
     "@tufjs/canonical-json" "1.0.0"
     minimatch "^9.0.0"
+
+"@types/cordova@latest":
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/@types/cordova/-/cordova-11.0.3.tgz#4301b1c614899c1c99a83aac45914285462201b7"
+  integrity sha512-kyuRQ40/NWQVhqGIHq78Ehu2Bf9Mlg0LhmSmis6ZFJK7z933FRfYi8tHe/k/0fB+PGfCf95rJC6TO7dopaFvAg==
 
 "@types/json-schema@^7.0.12":
   version "7.0.15"
@@ -1435,6 +1447,11 @@ conventional-recommended-bump@7.0.1:
     git-raw-commits "^3.0.0"
     git-semver-tags "^5.0.0"
     meow "^8.1.2"
+
+cordova-plugin-file@^8.0.0:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-file/-/cordova-plugin-file-8.0.1.tgz#e595b5bdf249816bd38ab1a511b46efe0f4d1ef9"
+  integrity sha512-LgFLNQN58xguoJkNc8eGBmg/Vuaah9lY3Nye27OAfWCKalXPRjExIg5r8L3qlfiJxzmzupjrF0M4KdU2Lovm3Q==
 
 core-util-is@~1.0.0:
   version "1.0.3"
