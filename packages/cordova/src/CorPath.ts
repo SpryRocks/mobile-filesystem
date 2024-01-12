@@ -14,7 +14,7 @@ export class CorPath extends NativePath<CorPath> {
 
 	override getName() {
 		const name = super.getName();
-		if (name.length < 1) return this.directory;
+		if (!name.length) return this.directory;
 		return name;
 	}
 }

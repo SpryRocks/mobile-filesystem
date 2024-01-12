@@ -1,4 +1,5 @@
 import { SystemDirectoryType } from '@spryrocks/mobile-filesystem-plugin-core';
+import { DirectoryEntry, Entry } from './Plugin';
 declare var cordova: any;
 
 export const mapSystemDirectoryToCor = (type: SystemDirectoryType): string => {
@@ -13,4 +14,10 @@ export const mapSystemDirectoryToCor = (type: SystemDirectoryType): string => {
 			return cordova.file.cacheDirectory;
 	}
 	throw new Error(`Unsupported system directory type: ${type}`);
+};
+
+export const resolveDirectoryAsync = (directory: string): Promise<DirectoryEntry> => {
+	return new Promise((resolve, reject) => {
+		window['resolveLocalFileSystemURL'](directory, (entry: Entry) => resolve(<DirectoryEntry>entry), reject);
+	});
 };
