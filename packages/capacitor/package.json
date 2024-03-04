@@ -1,6 +1,6 @@
 {
   "name": "@spryrocks/capacitor-filesystem-plugin",
-  "version": "2.0.0-alpha.5",
+  "version": "2.0.1-alpha.0",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -19,7 +19,7 @@
     "compile": "tsc --noEmit"
   },
   "dependencies": {
-    "@spryrocks/mobile-filesystem-plugin-core": "^5.0.0-alpha.5"
+    "@spryrocks/mobile-filesystem-plugin-core": "^5.0.1-alpha.0"
   },
   "peerDependencies": {
     "@capacitor/core": "^2.5.0"
