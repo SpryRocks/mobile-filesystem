@@ -5,7 +5,6 @@ export const mapSystemDirectoryToCap = (type: SystemDirectoryType): CapDirectory
   const map = new Map<SystemDirectoryType, CapDirectory>([
     [SystemDirectoryType.Documents, CapDirectory.Documents],
     [SystemDirectoryType.Data, CapDirectory.Data],
-    [SystemDirectoryType.Library, CapDirectory.Library],
     [SystemDirectoryType.Cache, CapDirectory.Cache],
     [SystemDirectoryType.External, CapDirectory.External],
     [SystemDirectoryType.ExternalStorage, CapDirectory.ExternalStorage],
