@@ -2,15 +2,15 @@ import {Directory as CapDirectory} from './Plugin';
 import {SystemDirectoryType} from '@spryrocks/mobile-filesystem-plugin-core';
 
 export const mapSystemDirectoryToCap = (type: SystemDirectoryType): CapDirectory => {
-  switch (type) {
-    case SystemDirectoryType.Data:
-      return CapDirectory.Data;
-    case SystemDirectoryType.ExternalData:
-      return CapDirectory.External;
-    case SystemDirectoryType.Documents:
-      return CapDirectory.Documents;
-    case SystemDirectoryType.Cache:
-      return CapDirectory.Cache;
-  }
-  throw new Error(`Unsupported system directory type: ${type}`);
+  const map = new Map<SystemDirectoryType, CapDirectory>([
+    [SystemDirectoryType.Documents, CapDirectory.Documents],
+    [SystemDirectoryType.Data, CapDirectory.Data],
+    [SystemDirectoryType.Library, CapDirectory.Library],
+    [SystemDirectoryType.Cache, CapDirectory.Cache],
+    [SystemDirectoryType.External, CapDirectory.External],
+    [SystemDirectoryType.ExternalStorage, CapDirectory.ExternalStorage],
+  ]);
+  const result = map.get(type);
+  if (!result) throw new Error(`Unsupported system directory type: ${type}`);
+  return result;
 };

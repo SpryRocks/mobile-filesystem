@@ -1,7 +1,8 @@
 export enum SystemDirectoryType {
-  Data = 'Data',
-  ExternalData = 'ExternalData',
   Documents = 'Documents',
+  Data = 'Data',
+  Library = 'Library',
   Cache = 'Cache',
-  Temp = 'Temp',
+  External = 'External',
+  ExternalStorage = 'ExternalStorage',
 }
